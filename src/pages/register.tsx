@@ -61,7 +61,7 @@ function RegisterPage() {
 
   return (
     <>
-      <div className="container min-h-screen mx-auto md:flex justify-between">
+      <div className="container min-h-screen mx-auto md:flex justify-between font-inter">
         <div className="hidden md:grow md:flex align-middle w-3/4 lg:w-auto">
           <img
             className="max-h-screen w-auto"
