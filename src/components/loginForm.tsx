@@ -1,7 +1,22 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
+import { api } from "../../utils/api";
 
 function LoginForm() {
   const [showPw1, setShowPw1] = useState(false);
+
+  const [error, setError] = useState({ form: null, msg: null });
+  const [form, setForm] = useState({ email: "", password: "" });
+  // const [email, setEmail] = useState("");
+  // const [password, setPassword] = useState("");
+
+  const handleChange = (e: { target: { value: string; name: string } }) => {
+    const { value, name } = e.target;
+
+    setForm((prev): { email: string; password: string } | undefined => {
+      if (name === "email") return { email: value, password: prev.password };
+      if (name === "password") return { email: prev.email, password: value };
+    });
+  };
 
   const showPwOne = () => {
     return showPw1 ? (
@@ -31,29 +46,61 @@ function LoginForm() {
     );
   };
 
+  const handleSubmit = (e: any) => {
+    e.preventDefault();
+    return api
+      .post("/login", form)
+      .then((result) => {
+        console.log(result);
+      })
+      .catch((err) => {
+        setError({ form: err.response.data.form, msg: err.response.data.msg });
+        setTimeout(() => {
+          setError({ form: null, msg: null });
+        }, 3000);
+        console.log(err);
+      });
+  };
+
   return (
     <>
       <form
+        method="post"
+        onSubmit={handleSubmit}
         id="registerForm"
         className="p-5 flex flex-col gap-4 border-b-2 border-x-2"
       >
-        <div id="emailInput" className="flex flex-col">
+        <div id="emailInput" className="flex flex-col relative">
+          {error.form === "email" && (
+            <p className="text-rose-700 p-1 absolute right-0 top-0">
+              {error.msg}
+            </p>
+          )}
           <label htmlFor="email">email:</label>
           <input
             type="email"
             name="email"
+            value={form.email}
             id="email"
+            onChange={handleChange}
             placeholder="example@mail.com"
             className="border-b-2 border-gray-400 p-2 focus:outline-none focus:border-black"
           />
         </div>
         <div id="passwordInput" className="flex flex-col relative">
+          {error.form === "password" && (
+            <p className="text-rose-700 p-1 absolute right-0 top-0">
+              {error.msg}
+            </p>
+          )}
           <label htmlFor="password">password:</label>
           <input
             minLength={6}
             type={showPw1 ? "text" : "password"}
             name="password"
             id="password"
+            value={form.password}
+            onChange={handleChange}
             placeholder="******"
             className="border-b-2 border-gray-400 p-2 focus:outline-none focus:border-black"
           />
@@ -62,7 +109,10 @@ function LoginForm() {
           </div>
         </div>
 
-        <button className="bg-sky-500 text-white drop-shadow-md rounded-xl w-fit p-2 px-5 my-2 self-end font-bold hover:bg-sky-600">
+        <button
+          className="bg-sky-500 text-white drop-shadow-md rounded-xl w-fit p-2 px-5 my-2 self-end font-bold hover:bg-sky-600"
+          type="submit"
+        >
           Login
         </button>
 
