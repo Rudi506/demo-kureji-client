@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-function RegisterPage() {
+function Register() {
   const [showPw1, setShowPw1] = useState(false);
   const [showPw2, setShowPw2] = useState(false);
 
@@ -61,65 +61,55 @@ function RegisterPage() {
 
   return (
     <>
-      <div className="container min-h-screen mx-auto md:flex justify-between font-inter">
-        <div className="hidden md:grow md:flex align-middle w-3/4 lg:w-auto">
-          <img
-            className="max-h-screen w-auto"
-            src="votebg.svg"
-            alt="Vote Img"
+      <form
+        id="registerForm"
+        className="p-5 flex flex-col gap-4 border-b-2 border-x-2"
+      >
+        <div id="emailInput" className="flex flex-col">
+          <label htmlFor="email">email:</label>
+          <input
+            type="email"
+            name="email"
+            id="email"
+            placeholder="example@mail.com"
+            className="border-b-2 border-gray-400 p-2 focus:outline-none focus:border-black"
           />
         </div>
-        <form
-          id="registerForm"
-          className="p-5 flex flex-col gap-4 max-w-md sm:self-end md:w-3/4 align my-auto"
-        >
-          <h1 className="text-2xl mx-auto w-fit font-semibold">Demo-kureji</h1>
-          <h2 className="text-2xl pb-2">Sign up</h2>
-          <div id="emailInput" className="flex flex-col">
-            <label htmlFor="email">email:</label>
-            <input
-              type="email"
-              name="email"
-              id="email"
-              placeholder="example@mail.com"
-              className="border-b-2 border-gray-400 p-2 focus:outline-none focus:border-black"
-            />
+        <div id="passwordInput" className="flex flex-col relative">
+          <label htmlFor="password">password:</label>
+          <input
+            minLength={6}
+            type={showPw1 ? "text" : "password"}
+            name="password"
+            id="password"
+            placeholder="******"
+            className="border-b-2 border-gray-400 p-2 focus:outline-none focus:border-black"
+          />
+          <div className="absolute right-1 bottom-2 fill-gray-400 cursor-pointer">
+            {showPwOne()}
           </div>
-          <div id="passwordInput" className="flex flex-col relative">
-            <label htmlFor="password">password:</label>
-            <input
-              minLength={6}
-              type={showPw1 ? "text" : "password"}
-              name="password"
-              id="password"
-              placeholder="******"
-              className="border-b-2 border-gray-400 p-2 focus:outline-none focus:border-black"
-            />
-            <div className="absolute right-1 bottom-2 fill-gray-400 cursor-pointer">
-              {showPwOne()}
-            </div>
+        </div>
+        <div id="confirmPwInput" className="flex flex-col relative">
+          <label htmlFor="confirmPw">confirm password</label>
+          <input
+            minLength={6}
+            type={showPw2 ? "text" : "password"}
+            name="confirmPw"
+            id="confirmPw"
+            placeholder="******"
+            className="border-b-2 border-gray-400 p-2 focus:outline-none focus:border-black"
+          />
+          <div className="absolute right-1 bottom-2 fill-gray-400 cursor-pointer">
+            {showPwTwo()}
           </div>
-          <div id="confirmPwInput" className="flex flex-col relative">
-            <label htmlFor="confirmPw">confirm password</label>
-            <input
-              minLength={6}
-              type={showPw2 ? "text" : "password"}
-              name="confirmPw"
-              id="confirmPw"
-              placeholder="******"
-              className="border-b-2 border-gray-400 p-2 focus:outline-none focus:border-black"
-            />
-            <div className="absolute right-1 bottom-2 fill-gray-400 cursor-pointer">
-              {showPwTwo()}
-            </div>
-          </div>
+        </div>
 
-          <button className="bg-sky-500 text-white drop-shadow-md rounded-xl w-fit p-2 px-5 my-2 self-end font-bold hover:bg-sky-600">
-            Register
-          </button>
-        </form>
-      </div>
+        <button className="bg-sky-500 text-white drop-shadow-md rounded-xl w-fit p-2 px-5 my-2 self-end font-bold hover:bg-sky-600">
+          Register
+        </button>
+      </form>
     </>
   );
 }
-export default RegisterPage;
+
+export default Register;

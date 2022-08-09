@@ -1,7 +1,9 @@
+import Login from "./pages/login";
+
 function App() {
   return (
     <div className="App font-inter">
-      <h1>main menu</h1>
+      <Login />
     </div>
   );
 }
