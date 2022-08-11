@@ -90,7 +90,7 @@ function Register() {
           </div>
         </div>
         <div id="confirmPwInput" className="flex flex-col relative">
-          <label htmlFor="confirmPw">confirm password</label>
+          <label htmlFor="confirmPw">confirm password:</label>
           <input
             minLength={6}
             type={showPw2 ? "text" : "password"}

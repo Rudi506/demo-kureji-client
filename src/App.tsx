@@ -1,10 +1,36 @@
+import { useEffect, useState } from "react";
 import Login from "./pages/login";
+import { getAccessToken, setAccessToken } from "./utils/accesstoken";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Users from "./pages/users";
+import { api } from "../utils/api";
+import { Home } from "./Home";
 
 function App() {
+  const [loading, setLoading] = useState(true);
+  const [logedIn, setLogedIn] = useState(false);
+
+  useEffect(() => {
+    api
+      .post("/refresh_token")
+      .then((result) => {
+        const { token } = result.data;
+        setAccessToken(token);
+        setLoading(false);
+        setLogedIn(true);
+      })
+      .catch((err) => err && setLoading(false));
+  }, []);
+
+  if (loading) return <>Loading...</>;
+
   return (
-    <div className="App font-inter">
-      <Login />
-    </div>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={!getAccessToken() ? <Login /> : <Home />} />
+        <Route path="/users" element={<Users />} />
+      </Routes>
+    </BrowserRouter>
   );
 }
 

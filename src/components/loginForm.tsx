@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { api } from "../../utils/api";
+import { setAccessToken } from "../utils/accesstoken";
+import { useNavigate } from "react-router-dom";
 
 function LoginForm() {
   const [showPw1, setShowPw1] = useState(false);
@@ -8,6 +10,7 @@ function LoginForm() {
   const [form, setForm] = useState({ email: "", password: "" });
   // const [email, setEmail] = useState("");
   // const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
   const handleChange = (e: { target: { value: string; name: string } }) => {
     const { value, name } = e.target;
@@ -51,14 +54,15 @@ function LoginForm() {
     return api
       .post("/login", form)
       .then((result) => {
-        console.log(result);
+        if (result && result.data) setAccessToken(result.data.token);
+        // navigate("/");
+        location.reload();
       })
       .catch((err) => {
         setError({ form: err.response.data.form, msg: err.response.data.msg });
         setTimeout(() => {
           setError({ form: null, msg: null });
         }, 3000);
-        console.log(err);
       });
   };
 
