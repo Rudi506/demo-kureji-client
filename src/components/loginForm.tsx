@@ -1,21 +1,20 @@
-import { useState, useEffect, useRef } from "react";
+import { useState } from "react";
 import { api } from "../../utils/api";
 import { setAccessToken } from "../utils/accesstoken";
-import { useNavigate } from "react-router-dom";
 
 function LoginForm() {
   const [showPw1, setShowPw1] = useState(false);
 
   const [error, setError] = useState({ form: null, msg: null });
-  const [form, setForm] = useState({ email: "", password: "" });
-  // const [email, setEmail] = useState("");
-  // const [password, setPassword] = useState("");
-  const navigate = useNavigate();
+  const [form, setForm] = useState<{ email: string; password: string }>({
+    email: "",
+    password: "",
+  });
 
   const handleChange = (e: { target: { value: string; name: string } }) => {
     const { value, name } = e.target;
 
-    setForm((prev): { email: string; password: string } | undefined => {
+    setForm((prev): { email: string; password: string } | any => {
       if (name === "email") return { email: value, password: prev.password };
       if (name === "password") return { email: prev.email, password: value };
     });
