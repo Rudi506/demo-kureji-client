@@ -14,9 +14,10 @@ function LoginForm() {
   const handleChange = (e: { target: { value: string; name: string } }) => {
     const { value, name } = e.target;
 
-    setForm((prev): { email: string; password: string } | any => {
+    setForm((prev): { email: string; password: string } => {
       if (name === "email") return { email: value, password: prev.password };
       if (name === "password") return { email: prev.email, password: value };
+      return { email: value, password: value };
     });
   };
 
