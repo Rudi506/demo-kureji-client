@@ -25,7 +25,7 @@ function Login() {
           />
         </div>
         <div className="relative max-w-md sm:self-end md:w-3/4 align my-auto h-screen ">
-          <h1 className="text-4xl mx-auto w-fit font-semibold py-20">
+          <h1 className="text-4xl mx-auto w-fit font-semibold py-10">
             Demo-kureji
           </h1>
           <div id="form-wrapper">
@@ -48,9 +48,6 @@ function Login() {
               </button>
             </div>
             {renderForm()}
-          </div>
-          <div className="absolute bottom-3 w-full">
-            <p className="text-center">A voting app made by Agung</p>
           </div>
         </div>
       </div>
