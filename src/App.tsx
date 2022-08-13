@@ -8,7 +8,6 @@ import { Home } from "./Home";
 
 function App() {
   const [loading, setLoading] = useState(true);
-  const [logedIn, setLogedIn] = useState(false);
 
   useEffect(() => {
     api
@@ -17,7 +16,6 @@ function App() {
         const { token } = result.data;
         setAccessToken(token);
         setLoading(false);
-        setLogedIn(true);
       })
       .catch((err) => err && setLoading(false));
   }, []);
