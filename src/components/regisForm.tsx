@@ -1,8 +1,59 @@
-import { useState } from "react";
+import React, { HTMLInputTypeAttribute, useState } from "react";
+import { api } from "../../utils/api";
 
 function Register() {
   const [showPw1, setShowPw1] = useState(false);
   const [showPw2, setShowPw2] = useState(false);
+  const [form, setForm] = useState<{
+    email: HTMLInputTypeAttribute;
+    name: HTMLInputTypeAttribute;
+    password: HTMLInputTypeAttribute;
+    confirmPw: HTMLInputTypeAttribute;
+  }>({
+    email: "",
+    name: "",
+    password: "",
+    confirmPw: "",
+  });
+  const [msg, setMsg] = useState({ form: "", msg: "" });
+  const [anim, setAnim] = useState(false);
+
+  const handleChange = (e: {
+    target: { value: HTMLInputTypeAttribute; name: HTMLInputTypeAttribute };
+  }) => {
+    const { value, name } = e.target;
+    setForm((prevState) => {
+      if (name === "email")
+        return {
+          email: value,
+          name: prevState.name,
+          password: prevState.password,
+          confirmPw: prevState.confirmPw,
+        };
+      if (name === "name")
+        return {
+          email: prevState.email,
+          name: value,
+          password: prevState.password,
+          confirmPw: prevState.confirmPw,
+        };
+      if (name === "password")
+        return {
+          email: prevState.email,
+          name: prevState.name,
+          password: value,
+          confirmPw: prevState.confirmPw,
+        };
+      if (name === "confirmPw")
+        return {
+          email: prevState.email,
+          name: prevState.name,
+          password: prevState.password,
+          confirmPw: value,
+        };
+      return { email: value, name: value, password: value, confirmPw: value };
+    });
+  };
 
   const showPwTwo = () => {
     return showPw2 ? (
@@ -59,29 +110,85 @@ function Register() {
     );
   };
 
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    setAnim(true);
+    return api
+      .post("/register_user", form)
+      .then(() => {
+        setMsg({ form: "form", msg: "register berhasil" });
+      })
+      .catch((err) => {
+        console.log(err);
+        setMsg({ form: err.response.data.form, msg: err.response.data.msg });
+        setTimeout(() => {
+          setMsg({ form: "", msg: "" });
+        }, 3000);
+      });
+  };
+
   return (
     <>
+      {msg.form === "form" && (
+        <p
+          className={`absolute py-3 px-5 bg-green-400 font-semibold text-white right-2 md:right-0 rounded-xl gap-x-5 flex transition-[top] ease-in-out ${
+            anim ? "top-2" : "-top-20"
+          }`}
+        >
+          {msg.msg}
+          <button onClick={() => setAnim(false)}>✖</button>
+        </p>
+      )}
+
       <form
+        autoComplete="off"
+        onSubmit={handleSubmit}
         id="registerForm"
-        className="p-5 flex flex-col gap-4 border-b-2 border-x-2"
+        className="p-5 flex flex-col gap-4 border-b-2 border-x-2 relative"
       >
-        <div id="emailInput" className="flex flex-col">
+        <div id="emailInput" className="flex flex-col relative">
+          {msg.form === "email" && (
+            <p className="text-rose-700 p-1 absolute right-0 top-0">
+              {msg.msg}
+            </p>
+          )}
           <label htmlFor="email">email:</label>
           <input
             type="email"
             name="email"
             id="email"
+            value={form.email}
+            onChange={handleChange}
             placeholder="example@mail.com"
             className="border-b-2 border-gray-400 p-2 focus:outline-none focus:border-black"
           />
         </div>
+        <div id="emailInput" className="flex flex-col">
+          <label htmlFor="name">name:</label>
+          <input
+            type="text"
+            name="name"
+            id="name"
+            value={form.name}
+            onChange={handleChange}
+            placeholder="Firstname Lasname"
+            className="border-b-2 border-gray-400 p-2 focus:outline-none focus:border-black"
+          />
+        </div>
         <div id="passwordInput" className="flex flex-col relative">
+          {msg.form === "password" && (
+            <p className="text-rose-700 p-1 absolute right-0 top-0">
+              {msg.msg}
+            </p>
+          )}
           <label htmlFor="password">password:</label>
           <input
             minLength={6}
             type={showPw1 ? "text" : "password"}
             name="password"
             id="password"
+            value={form.password}
+            onChange={handleChange}
             placeholder="******"
             className="border-b-2 border-gray-400 p-2 focus:outline-none focus:border-black"
           />
@@ -96,6 +203,8 @@ function Register() {
             type={showPw2 ? "text" : "password"}
             name="confirmPw"
             id="confirmPw"
+            value={form.confirmPw}
+            onChange={handleChange}
             placeholder="******"
             className="border-b-2 border-gray-400 p-2 focus:outline-none focus:border-black"
           />
@@ -104,7 +213,10 @@ function Register() {
           </div>
         </div>
 
-        <button className="bg-sky-500 text-white drop-shadow-md rounded-xl w-fit p-2 px-5 my-2 self-end font-bold hover:bg-sky-600">
+        <button
+          className="bg-sky-500 text-white drop-shadow-md rounded-xl w-fit p-2 px-5 my-2 self-end font-bold hover:bg-sky-600"
+          type="submit"
+        >
           Register
         </button>
       </form>
