@@ -4,7 +4,7 @@ import { getAccessToken, setAccessToken } from "./utils/accesstoken";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Users from "./pages/users";
 import { api } from "../utils/api";
-import { Home } from "./Home";
+import { Home } from "./pages/Home";
 
 function App() {
   const [loading, setLoading] = useState(true);
