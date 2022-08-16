@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 export const Navbar: React.FC = () => {
   return (
     <>
-      <nav className="fixed z-10 md:static bottom-0 md:left-0 md:top-0 w-full md:w-fit md:h-full">
+      <nav className="fixed z-10 md:static bottom-0 md:left-0 md:top-0 w-full md:w-fit md:h-screen">
         <ul className="flex md:flex-col md:w-fit md:h-full md:px-5 gap-2 md:gap-5 grow w-full bg-blue-800 justify-evenly pb-6 pt-3 text-white/90 md:justify-start text-blue-100">
           <li className="flex flex-col gap-1 pt-2 px-5 pb-2 items-center text-center cursor-pointer ">
             <Link to={"/"}>
