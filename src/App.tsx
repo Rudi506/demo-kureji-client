@@ -6,6 +6,7 @@ import Users from "./pages/users";
 import { api } from "../utils/api";
 import { Home } from "./pages/Home";
 import { Organization } from "./pages/organization";
+import { OrgDetail } from "./pages/orgDetail";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -29,6 +30,7 @@ function App() {
         <Route path="/" element={!getAccessToken() ? <Login /> : <Home />} />
         <Route path="/users" element={<Users />} />
         <Route path="/org" element={<Organization />} />
+        <Route path="/org/:id" element={<OrgDetail />} />
       </Routes>
     </BrowserRouter>
   );

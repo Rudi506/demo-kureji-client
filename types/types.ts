@@ -1,5 +1,3 @@
-import { RefCallback } from "react";
-
 export interface DataMapped {
   organization: String;
   admin: { name: String };
@@ -9,4 +7,18 @@ export interface DataMapped {
 export interface CloseBtn {
   isOpen: Boolean;
   closeBtn: (arg: boolean) => void;
+}
+export interface addEvent {
+  isOpen: Boolean;
+  closeBtn: (arg: boolean) => void;
+  orgId: String | undefined;
+}
+
+export interface orgDetail {
+  admin: { name: String };
+  _id: String;
+  organization: String;
+  description: String;
+  members: [];
+  voteEvents: [];
 }
