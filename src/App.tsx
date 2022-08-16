@@ -5,6 +5,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Users from "./pages/users";
 import { api } from "../utils/api";
 import { Home } from "./pages/Home";
+import { Organization } from "./pages/organization";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -27,6 +28,7 @@ function App() {
       <Routes>
         <Route path="/" element={!getAccessToken() ? <Login /> : <Home />} />
         <Route path="/users" element={<Users />} />
+        <Route path="/org" element={<Organization />} />
       </Routes>
     </BrowserRouter>
   );

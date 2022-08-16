@@ -10,7 +10,7 @@ export const Home = () => {
 
   return (
     <>
-      <div className="flex border-2 border-black h-screen">
+      <div className="flex h-screen">
         <Navbar />
         <VoteEvent />
         {/* <button onClick={Logout}>Logout</button> */}
