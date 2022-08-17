@@ -119,7 +119,6 @@ function Register() {
         setMsg({ form: "form", msg: "register berhasil" });
       })
       .catch((err) => {
-        console.log(err);
         setMsg({ form: err.response.data.form, msg: err.response.data.msg });
         setTimeout(() => {
           setMsg({ form: "", msg: "" });
