@@ -7,6 +7,7 @@ import { api } from "../utils/api";
 import { Home } from "./pages/Home";
 import { Organization } from "./pages/organization";
 import { OrgDetail } from "./pages/orgDetail";
+import { AddEvent } from "./pages/AddEvent";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -24,6 +25,7 @@ function App() {
 
   if (loading) return <>Loading...</>;
 
+  setTimeout(() => location.reload(), 1000 * 60 * 8);
   return (
     <BrowserRouter>
       <Routes>
@@ -31,6 +33,7 @@ function App() {
         <Route path="/users" element={<Users />} />
         <Route path="/org" element={<Organization />} />
         <Route path="/org/:id" element={<OrgDetail />} />
+        <Route path="/org/:id/create_event" element={<AddEvent />} />
       </Routes>
     </BrowserRouter>
   );
