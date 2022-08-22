@@ -1,22 +1,22 @@
 import React, { useState } from "react";
-import { useParams } from "react-router-dom";
-import { addEvent } from "../../types/types";
-import { api } from "../../utils/api";
-import DialogBox from "../components/dialogueBox";
+import { DialogBox } from "../components/dialogueBox";
 import { Navbar } from "../components/navbar";
 import { useCallbackPrompt } from "../hooks/useCallbackPropmpts";
 
 export const AddEvent: React.FC = () => {
-  const { id } = useParams();
-  const [voteTitle, setVoteTitle] = useState();
+  const [voteTitle, setVoteTitle] = useState("");
   const [candidate, setCandidate] = useState([
+    { ketua: "", wakil: "", description: "" },
     { ketua: "", wakil: "", description: "" },
   ]);
   const [showDialogue, setShowDialogue] = useState(false);
   const [showPrompt, confirmNavigation, cancelNavigation] =
     useCallbackPrompt(showDialogue);
 
-  const handleChangePaslon = (i, e) => {
+  const handleChangePaslon = (
+    i: number,
+    e: { target: { name: string; value: string } }
+  ) => {
     const { name, value } = e.target;
 
     console.log(`name ${name}, value ${value}`);
@@ -29,8 +29,6 @@ export const AddEvent: React.FC = () => {
     setCandidate(data);
     setShowDialogue(true);
   };
-
-  console.log({ voteTitle, candidate });
 
   const addPaslon = () => {
     let newField = { ketua: "", wakil: "", description: "" };
@@ -50,14 +48,14 @@ export const AddEvent: React.FC = () => {
   }; */
   return (
     <>
-      <div className="flex mb-20">
+      <div className="flex ">
         <Navbar />
         <DialogBox
           cancelNavigation={cancelNavigation}
           confirmNavigation={confirmNavigation}
           showDialog={showPrompt}
         />
-        <div className="px-5 py-3 w-screen flex flex-col gap-y-14 relative min-h-screen">
+        <div className="px-5 py-3 w-screen flex flex-col gap-y-14 relative max-h-screen overflow-y-auto pb-16">
           <h1 className="text-xl font-semibold">Buat Event</h1>
 
           <form className="flex flex-col gap-4">
@@ -103,7 +101,7 @@ export const AddEvent: React.FC = () => {
                     id="description"
                     value={v.description}
                     onChange={(e) => handleChangePaslon(i, e)}
-                    className="focus:outline-none border-b-2 border-gray-400 p-2"
+                    className="focus:outline-none focus:border-b-black border-b-2 border-gray-400 p-2"
                   ></textarea>
                 </div>
               ))}
@@ -115,6 +113,10 @@ export const AddEvent: React.FC = () => {
                 &#43; paslon
               </button>
             </div>
+
+            <button className="px-2 py-1 bg-blue-700 text-white w-fit rounded-xl self-end">
+              Buat Event
+            </button>
           </form>
         </div>
       </div>
