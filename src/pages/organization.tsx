@@ -21,13 +21,8 @@ export const Organization: React.FC = () => {
         headers: { "auth-token": accessToken ? `Bearer ${accessToken}` : "" },
       })
       .then((result) => {
-        const fetched = result.data.data;
-        const newData: [] = [];
-        fetched.map((v: { _id: never }) => {
-          const { _id } = v;
-          if (_id !== null) newData.push(_id);
-        });
-        setData(newData);
+        const { data } = result.data;
+        setData(data);
         setLoading(false);
       })
       .catch((err) => {
