@@ -1,10 +1,10 @@
 interface DialogBoxProps {
-  showDialog: boolean;
+  showDialog: boolean | { (): void };
   cancelNavigation: any;
   confirmNavigation: any;
 }
 
-const DialogBox: React.FC<DialogBoxProps> = ({
+export const DialogBox: React.FC<DialogBoxProps> = ({
   showDialog,
   cancelNavigation,
   confirmNavigation,
@@ -39,4 +39,3 @@ const DialogBox: React.FC<DialogBoxProps> = ({
     </div>
   );
 };
-export default DialogBox;
