@@ -1,4 +1,4 @@
-import { SetStateAction, useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { orgDetail } from "../../types/types";
 import { api } from "../../utils/api";
@@ -30,7 +30,7 @@ export const OrgDetail: React.FC = () => {
     <>
       <div className="flex">
         <Navbar />
-        <div className="px-5 py-3 w-screen flex flex-col gap-y-14 relative min-h-screen">
+        <div className="px-5 py-3 w-screen flex flex-col gap-y-14 relative max-h-screen overflow-auto pb-24">
           <div id="head">
             <h1 className="text-xl">{Data?.organization}</h1>
             <p className="leading-loose">{Data?.description}</p>
@@ -58,9 +58,12 @@ export const OrgDetail: React.FC = () => {
 
           <div id="members" className="flex flex-col gap-6">
             <div id="header2" className="flex justify-between">
-              <h2 className="text-lg underline-offset-1 underline text-gray-700">
-                members
-              </h2>
+              <div className="wrap flex items-center gap-3">
+                <h2 className="text-lg underline-offset-1 underline text-gray-700">
+                  members
+                </h2>
+                &#40;{Data?.members.length} anggota &#41;
+              </div>
               <button
                 className="px-2 py-1 bg-blue-700 text-white rounded-xl text-md font-semibold"
                 onClick={() =>
@@ -72,12 +75,11 @@ export const OrgDetail: React.FC = () => {
                 {isMemberModalOpen ? "✖ close" : <p>&#43; member</p>}
               </button>
             </div>
-            <AddMemberModal isOpen={isMemberModalOpen} />
-
-            <ul>
+            <AddMemberModal isOpen={isMemberModalOpen} orgId={id} />
+            <ul className="border-b-2 border-slate-400 pb-5">
               {Data?.members.map((v: { name: String }, i) => (
                 <li
-                  className="flex my-auto justify-between items-center"
+                  className="flex p-2 my-auto odd:bg-slate-300 justify-between items-center"
                   key={i}
                 >
                   <p>{v.name} </p>
