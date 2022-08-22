@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Login from "./pages/login";
 import { getAccessToken, setAccessToken } from "./utils/accesstoken";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import Users from "./pages/users";
 import { api } from "../utils/api";
 import { Home } from "./pages/Home";
@@ -30,10 +30,22 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={!getAccessToken() ? <Login /> : <Home />} />
-        <Route path="/users" element={<Users />} />
-        <Route path="/org" element={<Organization />} />
-        <Route path="/org/:id" element={<OrgDetail />} />
-        <Route path="/org/:id/create_event" element={<AddEvent />} />
+        <Route
+          path="/users"
+          element={getAccessToken() ? <Users /> : <Navigate to={"/"} />}
+        />
+        <Route
+          path="/org"
+          element={getAccessToken() ? <Organization /> : <Navigate to={"/"} />}
+        />
+        <Route
+          path="/org/:id"
+          element={getAccessToken() ? <OrgDetail /> : <Navigate to={"/"} />}
+        />
+        <Route
+          path="/org/:id/create_event"
+          element={getAccessToken() ? <AddEvent /> : <Navigate to={"/"} />}
+        />
       </Routes>
     </BrowserRouter>
   );
