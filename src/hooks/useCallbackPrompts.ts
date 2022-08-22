@@ -6,7 +6,7 @@ import { useBlocker } from "./useBlocker";
 export function useCallbackPrompt(when: any) {
   const navigate = useNavigate();
   const location = useLocation();
-  const [showPrompt, setShowPrompt] = useState(false);
+  const [showPrompt, setShowPrompt] = useState<boolean>(false);
   const [lastLocation, setLastLocation] = useState(null);
   const [confirmedNavigation, setConfirmedNavigation] = useState(false);
 
