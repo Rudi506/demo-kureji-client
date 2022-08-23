@@ -8,6 +8,7 @@ import { Home } from "./pages/Home";
 import { Organization } from "./pages/organization";
 import { OrgDetail } from "./pages/orgDetail";
 import { AddEvent } from "./pages/AddEvent";
+import { EventDetail } from "./pages/EventDetail";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -39,12 +40,16 @@ function App() {
           element={getAccessToken() ? <Organization /> : <Navigate to={"/"} />}
         />
         <Route
-          path="/org/:id"
+          path="/org/:orgId"
           element={getAccessToken() ? <OrgDetail /> : <Navigate to={"/"} />}
         />
         <Route
-          path="/org/:id/create_event"
+          path="/org/:orgId/create_event"
           element={getAccessToken() ? <AddEvent /> : <Navigate to={"/"} />}
+        />
+        <Route
+          path="/org/:orgId/event/:eventId"
+          element={getAccessToken() ? <EventDetail /> : <Navigate to={"/"} />}
         />
       </Routes>
     </BrowserRouter>
