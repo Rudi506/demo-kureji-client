@@ -1,29 +1,28 @@
 import React, { useState } from "react";
+import { useParams } from "react-router";
+import { api } from "../../utils/api";
 import { DialogBox } from "../components/dialogueBox";
 import { Navbar } from "../components/navbar";
-import { useCallbackPrompt } from "../hooks/useCallbackPropmpts";
+import { useCallbackPrompt } from "../hooks/useCallbackPrompts";
+import { getAccessToken } from "../utils/accesstoken";
 
 export const AddEvent: React.FC = () => {
   const [voteTitle, setVoteTitle] = useState("");
   const [candidate, setCandidate] = useState([
-    { ketua: "", wakil: "", description: "" },
-    { ketua: "", wakil: "", description: "" },
+    { calonKetua: "", calonWakil: "", description: "" },
+    { calonKetua: "", calonWakil: "", description: "" },
   ]);
   const [showDialogue, setShowDialogue] = useState(false);
   const [showPrompt, confirmNavigation, cancelNavigation] =
     useCallbackPrompt(showDialogue);
+
+  const { orgId } = useParams();
 
   const handleChangePaslon = (
     i: number,
     e: { target: { name: string; value: string } }
   ) => {
     const { name, value } = e.target;
-
-    console.log(`name ${name}, value ${value}`);
-    if (name === "voteTitle") {
-      setVoteTitle(value);
-      setShowDialogue(true);
-    }
     let data = [...candidate];
     data[i][name] = value;
     setCandidate(data);
@@ -35,17 +34,27 @@ export const AddEvent: React.FC = () => {
     setCandidate([...candidate, newField]);
   };
   // handle submit bellow
-  /**
   const handleSubmitVote = (e: React.FormEvent) => {
     e.preventDefault();
     const data = {
-      voteTitle: form.voteTitle,
-      candidates: form.candidates.replace(/\s/g, "").split(","),
-      registeredVoters: form.registeredVoters.replace(/\s/g, "").split(","),
+      voteTitle: voteTitle,
+      candidates: candidate,
     };
+    console.log(data);
+    const accessToken = getAccessToken();
+    api
+      .post(
+        `/org/${orgId}/add_event`,
+        data /** {
+        headers: {
+          "auth-token": accessToken ? `Bearer ${accessToken}` : "",
+        },
+      }*/
+      )
+      .then((result) => console.log(result))
+      .catch((err) => console.error(err));
+  };
 
-    api.post(`/org/${orgId}/add_event`);
-  }; */
   return (
     <>
       <div className="flex ">
@@ -58,14 +67,14 @@ export const AddEvent: React.FC = () => {
         <div className="px-5 py-3 w-screen flex flex-col gap-y-14 relative max-h-screen overflow-y-auto pb-16">
           <h1 className="text-xl font-semibold">Buat Event</h1>
 
-          <form className="flex flex-col gap-4">
+          <form onSubmit={handleSubmitVote} className="flex flex-col gap-4">
             <div id="voteTitle" className="flex flex-col">
               <label htmlFor="title">Title</label>
               <input
                 type="text"
                 name="voteTitle"
                 id="title"
-                onChange={(e) => handleChangePaslon(0, e)}
+                onChange={(e) => setVoteTitle(e.target.value)}
                 value={voteTitle}
                 placeholder="pemilihan ketua ..."
                 className="border-b-2 border-gray-400 p-2 focus:outline-none focus:border-black"
@@ -79,18 +88,18 @@ export const AddEvent: React.FC = () => {
                   <label htmlFor="ketua">{`paslon ${i + 1}`}</label>
                   <input
                     type="text"
-                    name="ketua"
+                    name="calonKetua"
                     id="ketua"
-                    value={v.ketua}
+                    value={v.calonKetua}
                     onChange={(e) => handleChangePaslon(i, e)}
                     placeholder="calon ketua"
                     className="border-b-2 border-gray-400 p-2 focus:outline-none focus:border-black"
                   />
                   <input
                     type="text"
-                    name="wakil"
+                    name="calonWakil"
                     id="wakil"
-                    value={v.wakil}
+                    value={v.calonWakil}
                     onChange={(e) => handleChangePaslon(i, e)}
                     placeholder="calon wakil"
                     className="border-b-2 border-gray-400 p-2 focus:outline-none focus:border-black"
