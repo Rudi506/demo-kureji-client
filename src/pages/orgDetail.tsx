@@ -2,18 +2,19 @@ import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { orgDetail } from "../../types/types";
 import { api } from "../../utils/api";
+import { ActiveEventList } from "../components/activeEventList";
 import { AddMemberModal } from "../components/addMember";
 import { Navbar } from "../components/navbar";
 
 export const OrgDetail: React.FC = () => {
-  const { id } = useParams();
+  const { orgId } = useParams();
   const [Data, setData] = useState<orgDetail>();
   const [Loading, setLoading] = useState<boolean>(true);
   const [isMemberModalOpen, setMemberModalOpen] = useState<boolean>(false);
 
   useEffect(() => {
     api
-      .get(`/org/${id}`)
+      .get(`/org/${orgId}`)
       .then((result) => {
         setData(result.data);
         setLoading(false);
@@ -39,21 +40,16 @@ export const OrgDetail: React.FC = () => {
           <div id="activeEvents" className="flex flex-col gap-6">
             <div id="header2" className="flex justify-between">
               <h2 className="text-lg underline-offset-1 underline text-gray-700">
-                Active Event
+                Events
               </h2>
               <Link
-                to={`/org/${id}/create_event`}
+                to={`/org/${orgId}/create_event`}
                 className="px-2 py-1 bg-blue-700 text-white rounded-xl text-md font-semibold"
               >
                 &#43; Event
               </Link>
             </div>
-            <ul>
-              {!Data?.voteEvents.length && <p>Belum ada vote event</p>}
-              {Data?.voteEvents.map((v, i) => (
-                <li key={i}>vote event</li>
-              ))}
-            </ul>
+            <ActiveEventList orgId={orgId} activeList={Data?.voteEvents} />
           </div>
 
           <div id="members" className="flex flex-col gap-6">
@@ -75,7 +71,7 @@ export const OrgDetail: React.FC = () => {
                 {isMemberModalOpen ? "✖ close" : <p>&#43; member</p>}
               </button>
             </div>
-            <AddMemberModal isOpen={isMemberModalOpen} orgId={id} />
+            <AddMemberModal isOpen={isMemberModalOpen} orgId={orgId} />
             <ul className="border-b-2 border-slate-400 pb-5">
               {Data?.members.map((v: { name: String }, i) => (
                 <li
