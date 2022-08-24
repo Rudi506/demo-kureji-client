@@ -13,6 +13,8 @@ export const AddEvent: React.FC = () => {
     { calonKetua: "", calonWakil: "", description: "" },
   ]);
   const [showDialogue, setShowDialogue] = useState(false);
+  const [anim, setAnim] = useState(false);
+  const [msg, setMsg] = useState({ msg: "aaa" });
   const [showPrompt, confirmNavigation, cancelNavigation] =
     useCallbackPrompt(showDialogue);
 
@@ -23,14 +25,23 @@ export const AddEvent: React.FC = () => {
     e: { target: { name: string; value: string } }
   ) => {
     const { name, value } = e.target;
-    let data = [...candidate];
+    let data: {
+      calonKetua: string;
+      calonWakil: string;
+      description: string;
+    }[] = [...candidate];
+
     data[i][name] = value;
     setCandidate(data);
     setShowDialogue(true);
   };
 
   const addPaslon = () => {
-    let newField = { ketua: "", wakil: "", description: "" };
+    let newField: {
+      calonKetua: string;
+      calonWakil: string;
+      description: string;
+    } = { calonKetua: "", calonWakil: "", description: "" };
     setCandidate([...candidate, newField]);
   };
   // handle submit bellow
@@ -40,23 +51,40 @@ export const AddEvent: React.FC = () => {
       voteTitle: voteTitle,
       candidates: candidate,
     };
-    console.log(data);
     const accessToken = getAccessToken();
     api
-      .post(
-        `/org/${orgId}/add_event`,
-        data /** {
+      .post(`/org/${orgId}/add_event`, data, {
         headers: {
           "auth-token": accessToken ? `Bearer ${accessToken}` : "",
         },
-      }*/
-      )
-      .then((result) => console.log(result))
+      })
+      .then((result) => {
+        setMsg({ msg: "event berhasil ditambahkan" });
+        setAnim(true);
+        setVoteTitle("");
+        setCandidate(
+          candidate.map((v, i) => {
+            return { calonKetua: "", calonWakil: "", description: "" };
+          })
+        );
+        setTimeout(() => {
+          setMsg({ msg: "" });
+          setAnim(false);
+        }, 1500);
+      })
       .catch((err) => console.error(err));
   };
 
   return (
     <>
+      <p
+        className={`fixed py-3 px-5 mr-10 bg-green-400 font-semibold text-white right-2 md:right-0 rounded-xl gap-x-5 flex transition-[top] ease-in-out z-10 ${
+          anim ? "top-2" : "-top-20"
+        }`}
+      >
+        {msg.msg}
+        <button onClick={() => setAnim(false)}>✖</button>
+      </p>
       <div className="flex ">
         <Navbar />
         <DialogBox
