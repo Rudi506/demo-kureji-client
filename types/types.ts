@@ -22,3 +22,12 @@ export interface orgDetail {
   members: [];
   voteEvents: [];
 }
+
+export interface eventDetail {
+  _id: string;
+  voteTitle: string;
+  holder: string;
+  isActive: boolean;
+  candidates: { calonKetua: string; wakilKetua: string; description: string };
+  createdAt: Date;
+}
