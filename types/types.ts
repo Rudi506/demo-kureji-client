@@ -26,8 +26,9 @@ export interface orgDetail {
 export interface eventDetail {
   _id: string;
   voteTitle: string;
-  holder: string;
+  holder: { organization: string };
   isActive: boolean;
-  candidates: { calonKetua: string; wakilKetua: string; description: string };
+  candidates: { calonKetua: string; calonWakil: string; description: string }[];
+  registeredVoters: { voter: { name: string } }[];
   createdAt: Date;
 }
