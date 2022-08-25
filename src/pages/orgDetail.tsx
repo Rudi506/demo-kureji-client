@@ -4,10 +4,11 @@ import { orgDetail } from "../../types/types";
 import { api } from "../../utils/api";
 import { ActiveEventList } from "../components/activeEventList";
 import { AddMemberModal } from "../components/addMember";
+import { Loader } from "../components/Loader";
 import { Navbar } from "../components/navbar";
 
 export const OrgDetail: React.FC = () => {
-  const { orgId } = useParams();
+  const { orgId } = useParams<{ orgId: string }>();
   const [Data, setData] = useState<orgDetail>();
   const [Loading, setLoading] = useState<boolean>(true);
   const [isMemberModalOpen, setMemberModalOpen] = useState<boolean>(false);
@@ -31,7 +32,12 @@ export const OrgDetail: React.FC = () => {
     <>
       <div className="flex">
         <Navbar />
-        <div className="px-5 py-3 w-screen flex flex-col gap-y-14 relative max-h-screen overflow-auto pb-24">
+        {Loading && <Loader />}
+        <div
+          className={`${
+            Loading && "hidden"
+          } px-5 py-3 w-screen flex flex-col gap-y-14 relative max-h-screen overflow-auto pb-24`}
+        >
           <div id="head">
             <h1 className="text-xl">{Data?.organization}</h1>
             <p className="leading-loose">{Data?.description}</p>
