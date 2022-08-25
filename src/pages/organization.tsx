@@ -5,6 +5,7 @@ import { getAccessToken } from "../utils/accesstoken";
 import { Link } from "react-router-dom";
 import { DataMapped } from "../../types/types";
 import { CreateOrgModal } from "../components/createOrg";
+import { CardLoader } from "../components/Loader";
 
 export const Organization: React.FC = () => {
   const accessToken = getAccessToken();
@@ -30,35 +31,6 @@ export const Organization: React.FC = () => {
       });
   }, []);
 
-  const Loading = () => (
-    <>
-      <li>
-        <div
-          id="card"
-          className="border-2 border-gray-300 rounded-lg shadow-md shadow-gray-500 px-2 py-2 flex flex-col gap-2"
-        >
-          <div className="w-full flex flex-col gap-1">
-            <h1
-              className={`text-lg font-semibold bg-gray-200 w-[53%] text-transparent`}
-            >
-              Oganization name
-            </h1>
-            <p className="text-gray-500 text-xs bg-gray-200 w-fit text-transparent">
-              admin
-            </p>
-          </div>
-
-          <p className="text-xs  bg-gray-200 leading-relaxed w-full text-transparent">
-            lorem
-          </p>
-          <p className="text-xs  bg-gray-200 leading-relaxed w-[65%] text-transparent">
-            lorem
-          </p>
-        </div>
-      </li>
-    </>
-  );
-
   return (
     <>
       <div className="flex grow-1 ">
@@ -83,7 +55,7 @@ export const Organization: React.FC = () => {
           </button>
           <h1 className="text-xl font-bold text-gray-500">My Organization</h1>
           <ul className="flex flex-col gap-3">
-            {loading && Loading()}
+            {loading && <CardLoader />}
             {!loading &&
               data.map((v: DataMapped, i) => (
                 <li key={i}>
