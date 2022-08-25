@@ -25,11 +25,7 @@ export const AddEvent: React.FC = () => {
     e: { target: { name: string; value: string } }
   ) => {
     const { name, value } = e.target;
-    let data: {
-      calonKetua: string;
-      calonWakil: string;
-      description: string;
-    }[] = [...candidate];
+    let data: any[] = [...candidate];
 
     data[i][name] = value;
     setCandidate(data);
@@ -67,6 +63,7 @@ export const AddEvent: React.FC = () => {
             return { calonKetua: "", calonWakil: "", description: "" };
           })
         );
+        setShowDialogue(false);
         setTimeout(() => {
           setMsg({ msg: "" });
           setAnim(false);
