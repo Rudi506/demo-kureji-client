@@ -6,18 +6,27 @@ import { ActiveEventList } from "../components/activeEventList";
 import { AddMemberModal } from "../components/addMember";
 import { Loader } from "../components/Loader";
 import { Navbar } from "../components/navbar";
+import { getAccessToken } from "../utils/accesstoken";
 
 export const OrgDetail: React.FC = () => {
   const { orgId } = useParams<{ orgId: string }>();
   const [Data, setData] = useState<orgDetail>();
   const [Loading, setLoading] = useState<boolean>(true);
   const [isMemberModalOpen, setMemberModalOpen] = useState<boolean>(false);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   useEffect(() => {
+    const accessToken = getAccessToken();
     api
-      .get(`/org/${orgId}`)
+      .get(`/org/${orgId}`, {
+        headers: {
+          "auth-token": accessToken ? `Bearer ${accessToken}` : "",
+        },
+      })
       .then((result) => {
-        setData(result.data);
+        const { result: data, isAdmin } = result.data;
+        setIsAdmin(isAdmin);
+        setData(data);
         setLoading(false);
       })
       .catch((err) => {
@@ -25,8 +34,6 @@ export const OrgDetail: React.FC = () => {
         setLoading(false);
       });
   }, []);
-
-  Loading && <p>Loading...</p>;
 
   return (
     <>
@@ -48,12 +55,14 @@ export const OrgDetail: React.FC = () => {
               <h2 className="text-lg underline-offset-1 underline text-gray-700">
                 Events
               </h2>
-              <Link
-                to={`/org/${orgId}/create_event`}
-                className="px-2 py-1 bg-blue-700 text-white rounded-xl text-md font-semibold"
-              >
-                &#43; Event
-              </Link>
+              {isAdmin && (
+                <Link
+                  to={`/org/${orgId}/create_event`}
+                  className="px-2 py-1 bg-blue-700 text-white rounded-xl text-md font-semibold"
+                >
+                  &#43; Event
+                </Link>
+              )}
             </div>
             <ActiveEventList orgId={orgId} activeList={Data?.voteEvents} />
           </div>
@@ -66,18 +75,25 @@ export const OrgDetail: React.FC = () => {
                 </h2>
                 &#40;{Data?.members.length} anggota &#41;
               </div>
-              <button
-                className="px-2 py-1 bg-blue-700 text-white rounded-xl text-md font-semibold"
-                onClick={() =>
-                  isMemberModalOpen
-                    ? setMemberModalOpen(false)
-                    : setMemberModalOpen(true)
-                }
-              >
-                {isMemberModalOpen ? "✖ close" : <p>&#43; member</p>}
-              </button>
+              {isAdmin && (
+                <button
+                  className="px-2 py-1 bg-blue-700 text-white rounded-xl text-md font-semibold"
+                  onClick={() =>
+                    isMemberModalOpen
+                      ? setMemberModalOpen(false)
+                      : setMemberModalOpen(true)
+                  }
+                >
+                  {isMemberModalOpen ? "✖ close" : <p>&#43; member</p>}
+                </button>
+              )}
             </div>
-            <AddMemberModal isOpen={isMemberModalOpen} orgId={orgId} />
+            <AddMemberModal
+              updateData={(data) => setData(data)}
+              isAdmin={isAdmin}
+              isOpen={isMemberModalOpen}
+              orgId={orgId}
+            />
             <ul className="border-b-2 border-slate-400 pb-5">
               {Data?.members.map((v: { name: String }, i) => (
                 <li
