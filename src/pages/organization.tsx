@@ -35,25 +35,20 @@ export const Organization: React.FC = () => {
     <>
       <div className="flex grow-1 ">
         <Navbar />
-        <div className="px-5 py-3 w-screen flex flex-col gap-5 relative h-screen">
+        <div className="px-5 pb-32 py-3 w-screen flex flex-col gap-5 relative min-h-screen max-h-screen overflow-auto">
           <CreateOrgModal isOpen={isModalOpen} closeBtn={callback} />
-          <button
-            onClick={() => setIsOpen(true)}
-            id="addBtn"
-            className={`absolute md:bottom-7 bottom-24 right-0 mr-4 rounded-full shadow-lg shadow-blue-300 text-5xl font-extrabold bg-white justify-center items-center w-16 h-16 cursor-pointer ${
-              isModalOpen ? "hidden" : "flex"
-            }`}
-          >
-            <svg
-              className="w-10 h-10 fill-blue-800"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 448 512"
+          <div id="header" className="flex justify-between">
+            <h1 className="text-xl font-bold text-gray-500">My Organization</h1>
+            <button
+              onClick={() => setIsOpen(true)}
+              id="addBtn"
+              className={` rounded-xl bg-blue-500 text-white p-2 font-semibold hover:bg-blue-700 ${
+                isModalOpen ? "hidden" : "flex"
+              }`}
             >
-              {/* <!--! Font Awesome Pro 6.1.2 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --> */}
-              <path d="M432 256c0 17.69-14.33 32.01-32 32.01H256v144c0 17.69-14.33 31.99-32 31.99s-32-14.3-32-31.99v-144H48c-17.67 0-32-14.32-32-32.01s14.33-31.99 32-31.99H192v-144c0-17.69 14.33-32.01 32-32.01s32 14.32 32 32.01v144h144C417.7 224 432 238.3 432 256z" />
-            </svg>
-          </button>
-          <h1 className="text-xl font-bold text-gray-500">My Organization</h1>
+              Create Organization
+            </button>
+          </div>
           <ul className="flex flex-col gap-3">
             {loading && <CardLoader />}
             {!loading &&
