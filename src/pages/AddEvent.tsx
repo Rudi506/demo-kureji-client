@@ -89,7 +89,7 @@ export const AddEvent: React.FC = () => {
           confirmNavigation={confirmNavigation}
           showDialog={showPrompt}
         />
-        <div className="px-5 py-3 w-screen flex flex-col gap-y-14 relative max-h-screen overflow-y-auto pb-16">
+        <div className="px-5 pb-28 py-3 w-screen flex flex-col gap-y-14 relative max-h-screen overflow-y-auto ">
           <h1 className="text-xl font-semibold">Buat Event</h1>
 
           <form onSubmit={handleSubmitVote} className="flex flex-col gap-4">
