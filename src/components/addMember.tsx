@@ -5,7 +5,9 @@ import { getAccessToken } from "../utils/accesstoken";
 export const AddMemberModal: React.FC<{
   isOpen: Boolean;
   orgId: String | undefined;
-}> = ({ isOpen, orgId }) => {
+  isAdmin: boolean;
+  updateData: (arg: any) => void;
+}> = ({ isOpen, orgId, isAdmin, updateData }) => {
   const [form, setForm] = useState({ email: "" });
   const [emailList, setMailList] = useState([]);
   const [msg, setMsg] = useState({ msg: "" });
@@ -54,6 +56,8 @@ export const AddMemberModal: React.FC<{
         }
       )
       .then((result) => {
+        const { result: data } = result.data;
+        updateData(() => data);
         setMsg({ msg: "berhasil ditambahkan" });
         setAnim(true);
         setTimeout(() => {
@@ -63,8 +67,9 @@ export const AddMemberModal: React.FC<{
       })
       .catch((err) => console.log(err));
   };
-
-  return (
+  return !isAdmin ? (
+    <></>
+  ) : (
     <>
       <p
         className={`fixed py-3 px-5 mr-10 bg-green-400 font-semibold text-white right-2 md:right-0 rounded-xl gap-x-5 flex transition-[top] ease-in-out ${
