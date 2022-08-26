@@ -56,7 +56,7 @@ export const EventDetail = () => {
       })
       .catch((err) => {
         setActivateLoading(false);
-        console.error(err.message);
+        console.error(err.response.data);
       });
   };
 
