@@ -72,10 +72,7 @@ export const EventDetail = () => {
             Loading && "hidden"
           } max-h-screen px-5 py-3 w-screen flex flex-col gap-6 overflow-auto pb-24`}
         >
-          <div id="header" className="relative flex">
-            <h3 className="text-gray-400 md:absolute md:right-0 md:top-0 text-xs">
-              eventId: {Data?._id}
-            </h3>
+          <div id="header" className="relative flex flex-col md:flex-row">
             <div id="kiri" className="grow">
               <h1 className="text-2xl font-bold text-gray-600">
                 {Data?.voteTitle}
@@ -93,6 +90,9 @@ export const EventDetail = () => {
                   {Data?.isActive ? "aktif" : "inaktif"}
                 </p>
               </div>
+              <h3 className="text-gray-400 md:absolute md:right-0 md:top-0 text-xs">
+                eventId: {Data?._id}
+              </h3>
             </div>
             {isAdmin && (
               <button
