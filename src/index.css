@@ -7,3 +7,11 @@ html,
 body {
   font-family: "Inter" sans-serif;
 }
+
+#candidateCard #description::-webkit-scrollbar {
+  width: 0.3em;
+}
+#candidateCard #description::-webkit-scrollbar-thumb {
+  background-color: #b8b8b8;
+  border-radius: 10px;
+}
