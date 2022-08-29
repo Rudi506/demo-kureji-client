@@ -20,6 +20,7 @@ export const VotePage = () => {
         calonKetua: "",
         calonWakil: "",
         description: "",
+        numOfVotes: 0,
       },
     ],
     registeredVoters: [{ voter: { name: "" }, hasVoted: false }],
