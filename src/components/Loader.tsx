@@ -19,23 +19,23 @@ export const CardLoader = () => {
       <li>
         <div
           id="card"
-          className="border-2 border-gray-300 rounded-lg shadow-md shadow-gray-500 px-2 py-2 flex flex-col gap-2"
+          className="animate-pulse border-2 border-gray-300 rounded-lg shadow-md shadow-gray-500 px-2 py-2 flex flex-col gap-2"
         >
           <div className="w-full flex flex-col gap-1">
             <h1
-              className={`text-lg font-semibold bg-gray-200 w-[53%] text-transparent`}
+              className={`text-lg font-semibold bg-slate-300 rounded-xl w-[53%] text-transparent`}
             >
               Oganization name
             </h1>
-            <p className="text-gray-500 text-xs bg-gray-200 w-fit text-transparent">
+            <p className="text-gray-500 text-xs bg-slate-300 rounded-xl w-fit text-transparent">
               admin
             </p>
           </div>
 
-          <p className="text-xs  bg-gray-200 leading-relaxed w-full text-transparent">
+          <p className="text-xs  bg-slate-300 rounded-xl leading-relaxed w-full text-transparent">
             lorem
           </p>
-          <p className="text-xs  bg-gray-200 leading-relaxed w-[65%] text-transparent">
+          <p className="text-xs  bg-slate-300 rounded-xl leading-relaxed w-[65%] text-transparent">
             lorem
           </p>
         </div>
