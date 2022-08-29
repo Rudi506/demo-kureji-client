@@ -9,9 +9,12 @@ import { Organization } from "./pages/organization";
 import { OrgDetail } from "./pages/orgDetail";
 import { AddEvent } from "./pages/AddEvent";
 import { EventDetail } from "./pages/EventDetail";
+import { VotePage } from "./pages/VotePage";
+import { Loader } from "./components/Loader";
 
 function App() {
   const [loading, setLoading] = useState(true);
+  const accessToken = getAccessToken();
 
   useEffect(() => {
     api
@@ -24,32 +27,54 @@ function App() {
       .catch((err) => err && setLoading(false));
   }, []);
 
-  if (loading) return <>Loading...</>;
+  if (loading) return <Loader />;
 
-  setTimeout(() => location.reload(), 1000 * 60 * 8);
+  setInterval(() => {
+    if (accessToken) {
+      api
+        .post("/refresh_token")
+        .then((result) => {
+          const { token } = result.data;
+          setAccessToken(token);
+          setLoading(false);
+        })
+        .catch((err) => err && setLoading(false));
+    }
+  }, 1000 * 60 * 9.9);
+
+  if (accessToken) {
+    console.log("ada token");
+  } else {
+    console.log("tidak");
+  }
+
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={!getAccessToken() ? <Login /> : <Home />} />
+        <Route path="/" element={!accessToken ? <Login /> : <Home />} />
         <Route
           path="/users"
-          element={getAccessToken() ? <Users /> : <Navigate to={"/"} />}
+          element={accessToken ? <Users /> : <Navigate to={"/"} />}
         />
         <Route
           path="/org"
-          element={getAccessToken() ? <Organization /> : <Navigate to={"/"} />}
+          element={accessToken ? <Organization /> : <Navigate to={"/"} />}
         />
         <Route
           path="/org/:orgId"
-          element={getAccessToken() ? <OrgDetail /> : <Navigate to={"/"} />}
+          element={accessToken ? <OrgDetail /> : <Navigate to={"/"} />}
         />
         <Route
           path="/org/:orgId/create_event"
-          element={getAccessToken() ? <AddEvent /> : <Navigate to={"/"} />}
+          element={accessToken ? <AddEvent /> : <Navigate to={"/"} />}
         />
         <Route
           path="/org/:orgId/event/:eventId"
-          element={getAccessToken() ? <EventDetail /> : <Navigate to={"/"} />}
+          element={accessToken ? <EventDetail /> : <Navigate to={"/"} />}
+        />
+        <Route
+          path="/org/:orgId/vote/:eventId"
+          element={accessToken ? <VotePage /> : <Navigate to={"/"} />}
         />
       </Routes>
     </BrowserRouter>
