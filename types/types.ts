@@ -28,7 +28,13 @@ export interface eventDetail {
   voteTitle: string;
   holder: { _id: string; organization: string };
   isActive: boolean;
-  candidates: { calonKetua: string; calonWakil: string; description: string }[];
-  registeredVoters: { voter: { name: string } }[];
-  createdAt: Date;
+  candidates: {
+    _id: string;
+    calonKetua: string;
+    calonWakil: string;
+    description: string;
+    numOfVotes: number;
+  }[];
+  registeredVoters: { voter: { name: string }; hasVoted: boolean }[];
+  createdAt: Date | undefined;
 }
