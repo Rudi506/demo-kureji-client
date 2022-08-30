@@ -2,11 +2,12 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router";
 import { eventDetail } from "../../types/types";
 import { api } from "../../utils/api";
+import { ChartVote } from "../components/ChartVote";
 import { Loader } from "../components/Loader";
 import { Navbar } from "../components/navbar";
 import { getAccessToken } from "../utils/accesstoken";
 
-export const VotePage = () => {
+export const VotePage: React.FC = () => {
   const { orgId, eventId } = useParams();
 
   const [Data, setData] = useState<eventDetail>({
@@ -44,7 +45,6 @@ export const VotePage = () => {
         (result: {
           data: { result: eventDetail; isAdmin: boolean; hasVoted: boolean };
         }) => {
-          console.log({ name: "first fetch", result });
           const { result: data, isAdmin, hasVoted } = result.data;
           setHasVoted(hasVoted);
           setIsAdmin(isAdmin);
@@ -75,7 +75,6 @@ export const VotePage = () => {
         }
       )
       .then((result) => {
-        console.log({ name: "VoteHandler", result });
         const {
           result: data,
           hasVoted,
@@ -97,6 +96,38 @@ export const VotePage = () => {
   const voteColectedPercent = Number(
     ((NumberHasVote / Data.registeredVoters.length) * 100).toFixed(1)
   );
+
+  useEffect(() => {
+    const reFetch = setInterval(() => {
+      api
+        .get(`/org/${orgId}/event/${eventId}`, {
+          headers: {
+            "auth-token": accessToken ? `Bearer ${accessToken}` : "",
+          },
+        })
+        .then(
+          (result: {
+            data: { result: eventDetail; isAdmin: boolean; hasVoted: boolean };
+          }) => {
+            const { result: data, isAdmin, hasVoted } = result.data;
+            setHasVoted(hasVoted);
+            setIsAdmin(isAdmin);
+            setData(data);
+            setCreatedAt(data.createdAt);
+            setLoading(false);
+            setNumberHasVote(
+              data.registeredVoters.filter((v) =>
+                v.hasVoted ? v.hasVoted : null
+              ).length
+            );
+          }
+        )
+        .catch((err) => {
+          setLoading(false);
+        });
+    }, 1000 * 60 * 5);
+    return () => clearInterval(reFetch);
+  }, [Data]);
 
   return (
     <>
@@ -174,13 +205,18 @@ export const VotePage = () => {
               {voteColectedPercent}% )
             </p>
             {HasVoted && voteColectedPercent >= 30 && (
-              <div className="w-full">
-                hehehhe
-                {Data.candidates.map((v, i) => (
-                  <li key={i}>
-                    {v.calonKetua} {v.numOfVotes}
-                  </li>
-                ))}
+              <div className="w-full p-5 flex justify-center">
+                <div
+                  id="char-wrapper"
+                  className="w-1/4 h-1/4 border-black border-1"
+                >
+                  <ChartVote
+                    data={{
+                      candidates: Data.candidates,
+                      voter: Data.registeredVoters,
+                    }}
+                  />
+                </div>
               </div>
             )}
           </div>
