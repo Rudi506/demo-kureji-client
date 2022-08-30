@@ -36,17 +36,12 @@ function App() {
         .then((result) => {
           const { token } = result.data;
           setAccessToken(token);
-          setLoading(false);
         })
-        .catch((err) => err && setLoading(false));
+        .catch((err) => {
+          console.error(err);
+        });
     }
   }, 1000 * 60 * 9.9);
-
-  if (accessToken) {
-    console.log("ada token");
-  } else {
-    console.log("tidak");
-  }
 
   return (
     <BrowserRouter>
