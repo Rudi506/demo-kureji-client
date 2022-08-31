@@ -4,9 +4,12 @@ export interface DataMapped {
   description: String;
   _id: String;
 }
-export interface CloseBtn {
+export interface createOrg {
   isOpen: Boolean;
   closeBtn: (arg: boolean) => void;
+  setData: (arg: any) => void;
+  setMsg: (arg: string) => void;
+  setAnim: (arg: boolean) => void;
 }
 export interface addEvent {
   isOpen: Boolean;
@@ -38,3 +41,10 @@ export interface eventDetail {
   registeredVoters: { voter: { name: string }; hasVoted: boolean }[];
   createdAt: Date | undefined;
 }
+
+// export interface user {
+//   _id: string
+//   organization: {
+
+//   }[]
+// }
