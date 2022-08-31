@@ -1,5 +1,7 @@
 import React, { HTMLInputTypeAttribute, useState } from "react";
 import { api } from "../../utils/api";
+import { SpinnerLoader } from "./Loader";
+import { SuccessModal } from "./modalBox";
 
 function Register() {
   const [showPw1, setShowPw1] = useState(false);
@@ -17,6 +19,7 @@ function Register() {
   });
   const [msg, setMsg] = useState({ form: "", msg: "" });
   const [anim, setAnim] = useState(false);
+  const [Loading, setLoading] = useState(false);
 
   const handleChange = (e: {
     target: { value: HTMLInputTypeAttribute; name: HTMLInputTypeAttribute };
@@ -113,32 +116,25 @@ function Register() {
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setAnim(true);
+    setLoading(true);
     return api
       .post("/register_user", form)
       .then(() => {
         setMsg({ form: "form", msg: "register berhasil" });
+        setLoading(false);
       })
       .catch((err) => {
         setMsg({ form: err.response.data.form, msg: err.response.data.msg });
         setTimeout(() => {
           setMsg({ form: "", msg: "" });
         }, 3000);
+        setLoading(false);
       });
   };
 
   return (
     <>
-      {msg.form === "form" && (
-        <p
-          className={`absolute py-3 px-5 bg-green-400 font-semibold text-white right-2 md:right-0 rounded-xl gap-x-5 flex transition-[top] ease-in-out ${
-            anim ? "top-2" : "-top-20"
-          }`}
-        >
-          {msg.msg}
-          <button onClick={() => setAnim(false)}>✖</button>
-        </p>
-      )}
-
+      <SuccessModal anim={anim} setAnim={(bool) => setAnim(bool)} msg={msg} />
       <form
         autoComplete="off"
         onSubmit={handleSubmit}
@@ -213,10 +209,12 @@ function Register() {
         </div>
 
         <button
-          className="bg-sky-500 text-white drop-shadow-md rounded-xl w-fit p-2 px-5 my-2 self-end font-bold hover:bg-sky-600"
+          className={` text-white drop-shadow-md rounded-xl w-fit p-2 px-5 my-2 self-end font-bold hover:bg-sky-600 ${
+            Loading ? `bg-purple-600` : `bg-sky-500`
+          }`}
           type="submit"
         >
-          Register
+          {Loading ? <SpinnerLoader /> : <>Register</>}
         </button>
       </form>
     </>
