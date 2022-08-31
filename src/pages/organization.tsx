@@ -6,6 +6,7 @@ import { Link } from "react-router-dom";
 import { DataMapped } from "../../types/types";
 import { CreateOrgModal } from "../components/createOrg";
 import { CardLoader } from "../components/Loader";
+import { SuccessModal } from "../components/modalBox";
 
 export const Organization: React.FC = () => {
   const accessToken = getAccessToken();
@@ -15,6 +16,8 @@ export const Organization: React.FC = () => {
   const callback = useCallback((handle: SetStateAction<boolean>) => {
     setIsOpen(handle);
   }, []);
+  const [anim, setAnim] = useState(false);
+  const [Msg, setMsg] = useState({ msg: "" });
 
   useEffect(() => {
     api
@@ -31,12 +34,26 @@ export const Organization: React.FC = () => {
       });
   }, []);
 
+  useEffect(() => {
+    console.log(data);
+  }, [data]);
   return (
     <>
       <div className="flex grow-1 ">
         <Navbar />
         <div className="px-5 pb-32 py-3 w-screen flex flex-col gap-5 relative min-h-screen max-h-screen overflow-auto">
-          <CreateOrgModal isOpen={isModalOpen} closeBtn={callback} />
+          <SuccessModal
+            anim={anim}
+            setAnim={(param) => setAnim(param)}
+            msg={Msg}
+          />
+          <CreateOrgModal
+            isOpen={isModalOpen}
+            closeBtn={callback}
+            setData={(data) => setData(data)}
+            setMsg={(data) => setMsg({ msg: data })}
+            setAnim={(bool) => setAnim(bool)}
+          />
           <div id="header" className="flex justify-between">
             <h1 className="text-xl font-bold text-gray-500">My Organization</h1>
             <button
