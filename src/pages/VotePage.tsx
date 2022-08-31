@@ -1,9 +1,10 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useParams } from "react-router";
 import { eventDetail } from "../../types/types";
 import { api } from "../../utils/api";
 import { ChartVote } from "../components/ChartVote";
 import { Loader } from "../components/Loader";
+import { ModalBox } from "../components/modalBox";
 import { Navbar } from "../components/navbar";
 import { getAccessToken } from "../utils/accesstoken";
 
@@ -32,6 +33,12 @@ export const VotePage: React.FC = () => {
   const [Loading, setLoading] = useState(true);
   const [NumberHasVote, setNumberHasVote] = useState<number>(0);
   const [HasVoted, setHasVoted] = useState<boolean>();
+  const [IsModalBoxOpen, setIsModalBoxOpen] = useState<boolean>(false);
+  const [candidate, setCandidate] = useState<{
+    id: string;
+    ketua: string;
+    wakil: string;
+  }>({ id: "", ketua: "", wakil: "" });
 
   const accessToken = getAccessToken();
   useEffect(() => {
@@ -89,7 +96,7 @@ export const VotePage: React.FC = () => {
         );
       })
       .catch((err) => {
-        console.log(err);
+        console.error(err);
       });
   };
 
@@ -129,6 +136,14 @@ export const VotePage: React.FC = () => {
     return () => clearInterval(reFetch);
   }, [Data]);
 
+  const handleModal = (e: React.ChangeEvent & any) => {
+    const ketua = e.currentTarget.getAttribute("data-ketua");
+    const wakil = e.currentTarget.getAttribute("data-wakil");
+    setCandidate({ id: e.target.id, ketua, wakil });
+
+    setIsModalBoxOpen(true);
+  };
+
   return (
     <>
       <div className="flex">
@@ -139,6 +154,12 @@ export const VotePage: React.FC = () => {
             Loading && "hidden"
           } max-h-screen min-h-screen px-5 py-3 pb-32 overflow-auto w-screen flex flex-col gap-10 relative`}
         >
+          <ModalBox
+            isOpen={IsModalBoxOpen}
+            reqCloseBtn={(close) => setIsModalBoxOpen(close)}
+            data={candidate}
+            submitVote={(id) => voteHandler(id)}
+          />
           <p className="absolute right-0 top-0 px-2 text-xs -z-10 text-slate-300">
             EventId: {Data?._id}
           </p>
@@ -172,8 +193,11 @@ export const VotePage: React.FC = () => {
                   <div id="candidateCard" className="flex flex-col gap-2 grow">
                     <div id="title" className="flex flex-col text-center">
                       <h1>{v.calonKetua}</h1>
-                      &amp;
-                      <h1>{v.calonWakil}</h1>
+                      {v.calonWakil && (
+                        <>
+                          &amp;<h1>{v.calonWakil}</h1>
+                        </>
+                      )}
                     </div>
                     <div id="description" className="grow">
                       <h2>description:</h2>
@@ -186,8 +210,11 @@ export const VotePage: React.FC = () => {
                     </div>
                     {!HasVoted && (
                       <button
+                        data-ketua={v.calonKetua}
+                        data-wakil={v.calonWakil}
+                        id={v._id}
                         className="bg-blue-600 text-white px-2 py-1 rounded-xl self-center"
-                        onClick={() => voteHandler(v._id)}
+                        onClick={(e) => handleModal(e)}
                       >
                         Vote
                       </button>
