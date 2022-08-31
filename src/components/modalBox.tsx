@@ -39,3 +39,20 @@ export const ModalBox: React.FC<{
     </div>
   );
 };
+
+export const SuccessModal: React.FC<{
+  anim: boolean;
+  setAnim: (arg: boolean) => void;
+  msg: { msg: string };
+}> = ({ anim, setAnim, msg }) => {
+  return (
+    <p
+      className={`absolute py-3 px-5 bg-green-400 font-semibold text-white right-2 md:right-0 rounded-xl gap-x-5 flex transition-[top] ease-in-out ${
+        anim ? "top-2" : "-top-20"
+      }`}
+    >
+      {msg.msg}
+      <button onClick={() => setAnim(false)}>✖</button>
+    </p>
+  );
+};
