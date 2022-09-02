@@ -39,6 +39,7 @@ export function useCallbackPrompt(when: any) {
 
   useEffect(() => {
     if (confirmedNavigation && lastLocation) {
+      // @ts-ignore: Unreachable code error
       navigate(lastLocation.location.pathname);
 
       // Clean-up state on confirmed navigation
