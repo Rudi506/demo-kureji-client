@@ -34,9 +34,6 @@ export const Organization: React.FC = () => {
       });
   }, []);
 
-  useEffect(() => {
-    console.log(data);
-  }, [data]);
   return (
     <>
       <div className="flex grow-1 ">
