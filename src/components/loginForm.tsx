@@ -1,10 +1,11 @@
 import { useState } from "react";
 import { api } from "../../utils/api";
 import { setAccessToken } from "../utils/accesstoken";
+import { SpinnerLoader } from "./Loader";
 
 function LoginForm() {
   const [showPw1, setShowPw1] = useState(false);
-
+  const [Loading, setLoading] = useState(false);
   const [error, setError] = useState({ form: null, msg: null });
   const [form, setForm] = useState<{ email: string; password: string }>({
     email: "",
@@ -51,11 +52,13 @@ function LoginForm() {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setLoading(true);
     return api
       .post("/login", form)
       .then((result) => {
         if (result && result.data) setAccessToken(result.data.token);
         // navigate("/");
+        setLoading(false);
         location.reload();
       })
       .catch((err) => {
@@ -114,10 +117,12 @@ function LoginForm() {
         </div>
 
         <button
-          className="bg-sky-500 text-white drop-shadow-md rounded-xl w-fit p-2 px-5 my-2 self-end font-bold hover:bg-sky-600"
+          className={`${
+            !Loading ? "bg-sky-500" : "bg-purple-500"
+          }  text-white drop-shadow-md rounded-xl w-fit p-2 px-5 my-2 self-end font-bold hover:bg-sky-600`}
           type="submit"
         >
-          Login
+          {Loading ? <SpinnerLoader /> : <>Login</>}
         </button>
 
         <a className="text-sm underline w-fit" href="">

@@ -1,6 +1,6 @@
 import axios from "axios";
 
 export const api = axios.create({
-  baseURL: `https://demo-kureji.herokuapp.com`,
+  baseURL: `http://localhost:3000`,
   withCredentials: true,
 });
