@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import { Navigate } from "react-router";
 import { api } from "../../utils/api";
 import { Navbar } from "../components/navbar";
 import { getAccessToken } from "../utils/accesstoken";

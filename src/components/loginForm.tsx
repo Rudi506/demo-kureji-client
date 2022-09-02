@@ -56,7 +56,7 @@ function LoginForm() {
       .then((result) => {
         if (result && result.data) setAccessToken(result.data.token);
         // navigate("/");
-        location.reload();
+        // location.reload();
       })
       .catch((err) => {
         setError({ form: err.response.data.form, msg: err.response.data.msg });
