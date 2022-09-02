@@ -39,7 +39,6 @@ function Users() {
       .post(`/logout`)
       .then((result) => {
         console.log(result);
-        location.reload();
       })
       .catch((err) => console.error(err));
   };
