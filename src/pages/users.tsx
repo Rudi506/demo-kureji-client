@@ -1,12 +1,13 @@
 import { useEffect, useState } from "react";
 import { api } from "../../utils/api";
 import { Navbar } from "../components/navbar";
-import { getAccessToken } from "../utils/accesstoken";
+import { getAccessToken, setAccessToken } from "../utils/accesstoken";
 
 function Users() {
   const [error, setError] = useState(null);
   const [data, setData] = useState([]);
   const [Count, setCount] = useState(0);
+  const [isLogedOut, setIsLogedOut] = useState(false);
 
   useEffect(() => {
     const accessToken = getAccessToken();
@@ -38,7 +39,8 @@ function Users() {
     api
       .post(`/logout`)
       .then((result) => {
-        console.log(result);
+        setAccessToken("");
+        location.reload();
       })
       .catch((err) => console.error(err));
   };
