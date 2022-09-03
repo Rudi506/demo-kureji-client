@@ -235,7 +235,7 @@ export const VotePage: React.FC = () => {
               <div className="w-full p-5 flex justify-center">
                 <div
                   id="char-wrapper"
-                  className="w-1/4 h-1/4 border-black border-1"
+                  className="w-full h-full md:w-1/4 md:h-1/4 border-black border-1"
                 >
                   <ChartVote
                     data={{
