@@ -23,9 +23,7 @@ function Users() {
         },
       })
       .then(({ data }) => {
-        console.log(data.result);
         const user = data.result;
-        // return setData(result.data.msg);
         setUser(user);
         setisLoading(false);
       })
