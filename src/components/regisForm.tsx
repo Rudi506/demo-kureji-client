@@ -115,12 +115,16 @@ function Register() {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setAnim(true);
     setLoading(true);
     return api
       .post("/register_user", form)
       .then(() => {
+        setAnim(true);
         setMsg({ form: "form", msg: "register berhasil" });
+        setTimeout(() => {
+          setAnim(false);
+          setMsg({ form: "", msg: "" });
+        }, 10000);
         setLoading(false);
       })
       .catch((err) => {
