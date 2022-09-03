@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 import { CardLoader, Loader } from "./Loader";
 
 export const VoteEvent: React.FC = () => {
-  const [eventList, setEventList] = useState<voteEvents[]>([]);
+  const [eventList, setEventList] = useState<voteEvents[]>();
   const [Loading, setLoading] = useState(true);
   const accessToken = getAccessToken();
 
@@ -52,8 +52,9 @@ export const VoteEvent: React.FC = () => {
       <div className="flex flex-col gap-5">
         <h1 className="text-xl font-bold text-gray-500">Active Vote</h1>
         <ul className="flex flex-col gap-3">
-          {Loading && <CardLoader />}
-          {!eventList.length ? (
+          {Loading ? (
+            <CardLoader />
+          ) : !eventList?.length ? (
             <p className="text-slate-400">No active voting currently</p>
           ) : (
             eventList.map((v, i) => (

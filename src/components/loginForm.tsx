@@ -66,6 +66,7 @@ function LoginForm() {
         setTimeout(() => {
           setError({ form: null, msg: null });
         }, 3000);
+        setLoading(false);
       });
   };
 

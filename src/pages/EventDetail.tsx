@@ -95,7 +95,7 @@ export const EventDetail = () => {
                 eventId: {Data?._id}
               </h3>
             </div>
-            <div id="kanan" className="flex self-end gap-2">
+            <div id="kanan" className="pt-5 md:pt-0 flex self-end gap-2">
               {Data?.isActive && (
                 <Link
                   to={`/org/${orgId}/vote/${eventId}`}
@@ -136,10 +136,17 @@ export const EventDetail = () => {
             <ul className="border-b-2 border-slate-400">
               {Data?.candidates.map((v, i) => (
                 <li key={i} className={`odd:bg-slate-200  p-2`}>
-                  <h2>
-                    {v.calonKetua} {v.calonWakil && <p>&amp;</p>} {v.calonWakil}
-                  </h2>
-                  <p>{v.description}</p>
+                  <div id="candidate" className="flex gap-2">
+                    <p>Kandidat:</p>
+                    <h2 className="flex gap-1">
+                      {v.calonKetua} {v.calonWakil && <p>&amp;</p>}{" "}
+                      {v.calonWakil}
+                    </h2>
+                  </div>
+                  <div id="description" className="flex gap-2">
+                    <p>description: </p>
+                    <p>{v.description}</p>
+                  </div>
                 </li>
               ))}
             </ul>
