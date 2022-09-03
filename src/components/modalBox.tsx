@@ -1,3 +1,7 @@
+import { logoutBtn } from "../../types/types";
+import { api } from "../../utils/api";
+import { setAccessToken } from "../utils/accesstoken";
+
 export const ModalBox: React.FC<{
   isOpen: boolean;
   reqCloseBtn: (arg: boolean) => void;
@@ -21,7 +25,7 @@ export const ModalBox: React.FC<{
           <p className="">
             Kamu akan memilih{" "}
             <strong>
-              {data.ketua} &amp; {data.wakil}
+              {data.ketua} {data.wakil && <>&amp; {data.wakil}</>}
             </strong>
           </p>
           <p>Sudah yakin dengan pilihanmu?</p>
@@ -54,5 +58,45 @@ export const SuccessModal: React.FC<{
       {msg.msg}
       <button onClick={() => setAnim(false)}>✖</button>
     </p>
+  );
+};
+
+export const LogoutModal: React.FC<logoutBtn> = ({
+  reqCloseBtn,
+  isOpen,
+  msg,
+  callFunction,
+}) => {
+  const Logout = () => {
+    api
+      .post(`/logout`)
+      .then((result) => {
+        setAccessToken("");
+        location.reload();
+      })
+      .catch((err) => console.error(err));
+  };
+  return (
+    <div
+      className={`${
+        !isOpen && "hidden"
+      } fixed  left-0 top-0 w-full h-full  z-30 bg-blue-500/5 backdrop-blur-sm w- shadow-xl outline outline-2 outline-blue-500/30 rounded-md flex justify-items-center`}
+    >
+      <div className="relative w-fit m-auto my-auto bg-white pt-10 pb-3 px-20 outline-2 outline outline-blue-600/20  flex flex-col gap-5 justify-center ">
+        <button
+          className="absolute top-2 right-2 text-sm"
+          onClick={() => reqCloseBtn(false)}
+        >
+          ✖
+        </button>
+        <p className="grow self-center">{msg}</p>
+        <button
+          className="p-3 py-2 w-fit text-white rounded-xl bg-red-500 self-center"
+          onClick={callFunction}
+        >
+          keluar
+        </button>
+      </div>
+    </div>
   );
 };
