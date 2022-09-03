@@ -3,17 +3,13 @@ import { VoteEvent } from "../components/ActiveVote";
 import { Navbar } from "../components/navbar";
 
 export const Home = () => {
-  const Logout = () => {
-    api.post("/logout").catch((err) => console.log(err));
-    location.reload();
-  };
-
   return (
     <>
-      <div className="flex h-screen">
+      <div className="flex grow-1">
         <Navbar />
-        <VoteEvent />
-        {/* <button onClick={Logout}>Logout</button> */}
+        <div className=" w-screen px-5 py-3 max-h-screen min-h-screen overflow-auto">
+          <VoteEvent />
+        </div>
       </div>
     </>
   );
