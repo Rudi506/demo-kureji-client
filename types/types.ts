@@ -42,9 +42,41 @@ export interface eventDetail {
   createdAt: Date | undefined;
 }
 
-// export interface user {
-//   _id: string
-//   organization: {
+export interface logoutBtn {
+  isOpen: boolean;
+  reqCloseBtn: (arg: boolean) => void;
+  msg: string;
+  callFunction: () => void;
+}
 
-//   }[]
-// }
+export interface user {
+  _id: string;
+  name: string;
+  email: string;
+  organization: organization[];
+  voteParticipation: voteEvents[];
+}
+
+export interface organization {
+  _id: string;
+  organization: string;
+  description: string;
+  admin: { _id: string; name: string; email: string };
+  members: user[];
+  voteEvents: [];
+}
+
+export interface voteEvents {
+  _id: string;
+  voteTitle: string;
+  holder: organization;
+  isActive: boolean;
+  finishedDate: Date;
+  candidates: {
+    calonKetua: string;
+    calonWakil: string;
+    description: string;
+    numOfVotes: number;
+  }[];
+  registeredVoters: { voter: user; hasVoted: boolean }[];
+}
