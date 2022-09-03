@@ -1,39 +1,39 @@
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
+import { user } from "../../types/types";
 import { api } from "../../utils/api";
+import { Loader } from "../components/Loader";
+import { LogoutModal } from "../components/modalBox";
 import { Navbar } from "../components/navbar";
 import { getAccessToken, setAccessToken } from "../utils/accesstoken";
 
 function Users() {
   const [error, setError] = useState(null);
-  const [data, setData] = useState([]);
-  const [Count, setCount] = useState(0);
-  const [isLogedOut, setIsLogedOut] = useState(false);
+  const [User, setUser] = useState<user>();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLoading, setisLoading] = useState(false);
 
   useEffect(() => {
     const accessToken = getAccessToken();
-
+    setisLoading(true);
     api
-      .get("/users", {
+      .get("/user", {
         headers: {
           "auth-token": accessToken ? `Bearer ${getAccessToken()}` : "",
         },
       })
-      .then((result) => {
-        return setData(result.data.msg);
-        // setData(result);
+      .then(({ data }) => {
+        console.log(data.result);
+        const user = data.result;
+        // return setData(result.data.msg);
+        setUser(user);
+        setisLoading(false);
       })
       .catch((err) => {
         setError(err.response.data);
-        // err.response.status === 401 && <Navigate to={"/"} />;
+        setisLoading(false);
       });
   }, []);
-
-  useEffect(() => {
-    let timer = setInterval(() => {
-      setCount(Count + 1);
-    }, 1000);
-    return () => clearInterval(timer);
-  }, [Count]);
 
   const Logout = () => {
     api
@@ -44,12 +44,31 @@ function Users() {
       })
       .catch((err) => console.error(err));
   };
+
+  useEffect(() => {
+    console.log(User);
+  }, [User]);
+
   return (
     <>
       <div className="flex h-screen">
         <Navbar />
-        <div className="px-5 py-3 w-full relative border-black border-2">
-          <button className=" absolute right-10 top-5 w-12 h-12 rounded-full drop-shadow-lg hover:drop-shadow-[0px_2px_2px_rgba(60,60,165,1)] outline outline-1 outline-slate-400 bg-white group">
+        {isLoading && <Loader />}
+        <div
+          className={`${
+            isLoading && "hidden"
+          } px-5 py-3 w-screen relative flex flex-col gap-5 min-h-screen overflow-auto`}
+        >
+          <LogoutModal
+            isOpen={isModalOpen}
+            reqCloseBtn={(reqClose) => setIsModalOpen(reqClose)}
+            msg={"yakin ingin keluar?"}
+            callFunction={Logout}
+          />
+          <button
+            className=" absolute right-5 top-5 w-12 h-12 rounded-full drop-shadow-lg hover:drop-shadow-[0px_2px_2px_rgba(60,60,165,1)] outline outline-1 outline-slate-400 bg-white group"
+            onClick={() => setIsModalOpen(true)}
+          >
             <div className="w-6 h-6 m-auto fill-slate-400 group-hover:fill-slate-600">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                 {/* <!--! Font Awesome Pro 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --> */}
@@ -57,12 +76,28 @@ function Users() {
               </svg>
             </div>
           </button>
-          <p>{Count}</p>
-          <button onClick={Logout}>LOGOUT</button>
-          <h1>Users</h1>
-          {data &&
-            data.map((v: { name: String }, i) => <p key={i}>{v.name}</p>)}
-          {error && <p>{error}</p>}
+          <div id="head" className="py-5">
+            <h1 className="text-3xl font-semibold ">{User?.name}</h1>
+            <p>{User?.email}</p>
+            <p className="text-xs py-2 text-slate-400">user id: {User?._id}</p>
+          </div>
+          <div id="voteParticipation">
+            <h1 className="text-lg font-semibold">Vote Participated In</h1>
+            <ul className="border-b-2 border-slate-400 pb-5">
+              {!User?.voteParticipation.length ? (
+                <>Anda belum pernah berpartisipasi dalam voting</>
+              ) : (
+                User?.voteParticipation.map((v, i) => (
+                  <Link to={`/org/${v.holder._id}/event/${v._id}`} key={i}>
+                    <li className={`odd:bg-slate-200 p-3`}>
+                      <h1 className="text-md font-semibold">{v.voteTitle}</h1>
+                      <p>holder: {v.holder.organization}</p>
+                    </li>
+                  </Link>
+                ))
+              )}
+            </ul>
+          </div>
         </div>
       </div>
     </>
