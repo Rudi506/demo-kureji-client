@@ -39,7 +39,7 @@ export interface eventDetail {
     numOfVotes: number;
   }[];
   registeredVoters: { voter: { name: string }; hasVoted: boolean }[];
-  createdAt: Date | undefined;
+  createdAt: string;
 }
 
 export interface logoutBtn {
