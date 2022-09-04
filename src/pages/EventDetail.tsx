@@ -6,14 +6,33 @@ import { api } from "../../utils/api";
 import { Loader } from "../components/Loader";
 import { Navbar } from "../components/navbar";
 import { getAccessToken } from "../utils/accesstoken";
+import { VoteResult } from "../components/VoteResult";
 
 export const EventDetail = () => {
   const { eventId, orgId } = useParams();
-  const [Data, setData] = useState<eventDetail>();
+  const [Data, setData] = useState<eventDetail>({
+    _id: "",
+    voteTitle: "",
+    holder: { _id: "", organization: "" },
+    isActive: false,
+    candidates: [
+      {
+        _id: "",
+        calonKetua: "",
+        calonWakil: "",
+        description: "",
+        numOfVotes: 0,
+      },
+    ],
+    registeredVoters: [{ voter: { name: "" }, hasVoted: false }],
+    createdAt: "",
+  });
   const [Loading, setLoading] = useState(true);
   const [activateLoading, setActivateLoading] = useState(false);
   const [CreatedAt, setCreatedAt] = useState<string>("");
-  const [isAdmin, setIsAdmin] = useState(false);
+  const [isAdmin, setIsAdmin] = useState<boolean>(false);
+  const [isUserRegistered, setIsUserRegistered] = useState(false);
+  const [NumberHasVote, setNumberHasVote] = useState<number>(0);
   const milis = Date.parse(CreatedAt);
   const date = new Date(milis).toUTCString();
 
@@ -27,11 +46,24 @@ export const EventDetail = () => {
         },
       })
       .then((result) => {
-        const { result: data, isAdmin } = result.data;
+        const {
+          result: data,
+          isAdmin,
+          isUserRegistered,
+        }: {
+          result: eventDetail;
+          isAdmin: boolean;
+          isUserRegistered: boolean;
+        } = result.data;
+        setIsUserRegistered(isUserRegistered);
         setIsAdmin(isAdmin);
         setData(data);
         setCreatedAt(data.createdAt);
         setLoading(false);
+        setNumberHasVote(
+          data.registeredVoters.filter((v) => (v.hasVoted ? v.hasVoted : null))
+            .length
+        );
       })
       .catch((err) => {
         setLoading(false);
@@ -71,7 +103,7 @@ export const EventDetail = () => {
         <div
           className={`${
             Loading && "hidden"
-          } max-h-screen px-5 py-3 w-screen flex flex-col gap-6 overflow-auto pb-24`}
+          } max-h-screen px-5 py-3 w-screen flex flex-col gap-6 overflow-auto pb-32`}
         >
           <div id="header" className="relative flex flex-col md:flex-row">
             <div id="kiri" className="grow">
@@ -96,14 +128,16 @@ export const EventDetail = () => {
               </h3>
             </div>
             <div id="kanan" className="pt-5 md:pt-0 flex self-end gap-2">
-              {Data?.isActive && (
-                <Link
-                  to={`/org/${orgId}/vote/${eventId}`}
-                  className={`bg-blue-600 rounded-xl px-5 p-2 text-white text-center`}
-                >
-                  Vote
-                </Link>
-              )}
+              {!isUserRegistered
+                ? null
+                : Data?.isActive && (
+                    <Link
+                      to={`/org/${orgId}/vote/${eventId}`}
+                      className={`bg-blue-600 rounded-xl px-5 p-2 text-white text-center`}
+                    >
+                      Vote
+                    </Link>
+                  )}
               {isAdmin && (
                 <button
                   onClick={toggleActiveEvent}
@@ -161,6 +195,7 @@ export const EventDetail = () => {
               ))}
             </ul>
           </div>
+          <VoteResult eventData={Data} sumVoted={NumberHasVote} />
         </div>
       </div>
     </>

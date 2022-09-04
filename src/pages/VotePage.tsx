@@ -26,12 +26,11 @@ export const VotePage: React.FC = () => {
       },
     ],
     registeredVoters: [{ voter: { name: "" }, hasVoted: false }],
-    createdAt: new Date(),
+    createdAt: "",
   });
   const [IsAdmin, setIsAdmin] = useState(false);
-  const [CreatedAt, setCreatedAt] = useState<Date>();
+  const [CreatedAt, setCreatedAt] = useState<string>();
   const [Loading, setLoading] = useState(true);
-  const [NumberHasVote, setNumberHasVote] = useState<number>(0);
   const [HasVoted, setHasVoted] = useState<boolean>();
   const [IsModalBoxOpen, setIsModalBoxOpen] = useState<boolean>(false);
   const [candidate, setCandidate] = useState<{
@@ -58,11 +57,6 @@ export const VotePage: React.FC = () => {
           setData(data);
           setCreatedAt(data.createdAt);
           setLoading(false);
-          setNumberHasVote(
-            data.registeredVoters.filter((v) =>
-              v.hasVoted ? v.hasVoted : null
-            ).length
-          );
         }
       )
       .catch((err) => {
@@ -90,51 +84,11 @@ export const VotePage: React.FC = () => {
         setCreatedAt(data.createdAt);
         setLoading(false);
         setHasVoted(hasVoted);
-        setNumberHasVote(
-          data.registeredVoters.filter((v) => (v.hasVoted ? v.hasVoted : null))
-            .length
-        );
       })
       .catch((err) => {
         console.error(err);
       });
   };
-
-  const voteColectedPercent = Number(
-    ((NumberHasVote / Data.registeredVoters.length) * 100).toFixed(1)
-  );
-
-  useEffect(() => {
-    const reFetch = setInterval(() => {
-      api
-        .get(`/org/${orgId}/event/${eventId}`, {
-          headers: {
-            "auth-token": accessToken ? `Bearer ${accessToken}` : "",
-          },
-        })
-        .then(
-          (result: {
-            data: { result: eventDetail; isAdmin: boolean; hasVoted: boolean };
-          }) => {
-            const { result: data, isAdmin, hasVoted } = result.data;
-            setHasVoted(hasVoted);
-            setIsAdmin(isAdmin);
-            setData(data);
-            setCreatedAt(data.createdAt);
-            setLoading(false);
-            setNumberHasVote(
-              data.registeredVoters.filter((v) =>
-                v.hasVoted ? v.hasVoted : null
-              ).length
-            );
-          }
-        )
-        .catch((err) => {
-          setLoading(false);
-        });
-    }, 1000 * 60 * 5);
-    return () => clearInterval(reFetch);
-  }, [Data]);
 
   const handleModal = (e: React.ChangeEvent & any) => {
     const ketua = e.currentTarget.getAttribute("data-ketua");
@@ -223,29 +177,6 @@ export const VotePage: React.FC = () => {
                 </li>
               ))}
             </ul>
-          </div>
-
-          <div id="voters">
-            <h2 className="text-xl font-semibold">Result</h2>
-            <p>
-              vote Collected: {NumberHasVote}/{Data.registeredVoters.length} ({" "}
-              {voteColectedPercent}% )
-            </p>
-            {HasVoted && voteColectedPercent >= 30 && (
-              <div className="w-full p-5 flex justify-center">
-                <div
-                  id="char-wrapper"
-                  className="w-full h-full md:w-1/4 md:h-1/4 border-black border-1"
-                >
-                  <ChartVote
-                    data={{
-                      candidates: Data.candidates,
-                      voter: Data.registeredVoters,
-                    }}
-                  />
-                </div>
-              </div>
-            )}
           </div>
         </div>
       </div>
