@@ -55,7 +55,7 @@ function Users() {
         <div
           className={`${
             isLoading && "hidden"
-          } px-5 py-3 w-screen relative flex flex-col gap-5 min-h-screen overflow-auto`}
+          } px-5 py-3 pb-32 w-screen relative flex flex-col gap-5 min-h-screen overflow-auto`}
         >
           <LogoutModal
             isOpen={isModalOpen}
