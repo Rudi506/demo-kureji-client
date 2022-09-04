@@ -43,7 +43,7 @@ export const OrgDetail: React.FC = () => {
         <div
           className={`${
             Loading && "hidden"
-          } px-5 py-3 w-screen flex flex-col gap-y-14 relative max-h-screen overflow-auto pb-24`}
+          } px-5 py-3 w-screen flex flex-col gap-y-14 relative max-h-screen overflow-auto pb-32`}
         >
           <div id="head">
             <h1 className="text-xl">{Data?.organization}</h1>
