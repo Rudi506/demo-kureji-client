@@ -1,3 +1,5 @@
+import { ReactNode } from "react";
+
 export interface createOrg {
   isOpen: Boolean;
   closeBtn: (arg: boolean) => void;
@@ -77,4 +79,13 @@ export interface ListCardTypes {
   subHeading: String;
   description: String;
   children: React.ReactNode;
+}
+
+export interface DeleteModalTypes {
+  showDeleteModal: boolean;
+  reqCloseBtn: (arg: boolean) => void;
+  children: ReactNode;
+  deletedItem: string;
+  URI: string;
+  type: string;
 }
