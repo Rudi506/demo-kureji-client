@@ -26,14 +26,21 @@ export const Organization: React.FC = () => {
         headers: { "auth-token": accessToken ? `Bearer ${accessToken}` : "" },
       })
       .then((result) => {
-        const { data } = result.data;
-        setData(data);
+        const { data }: { data: organization[] } = result.data;
+        setData(
+          data.filter((v) => {
+            if (v.admin) v;
+          })
+        );
         setLoading(false);
       })
       .catch((err) => {
         setLoading(false);
       });
   }, []);
+  useEffect(() => {
+    console.log(data);
+  }, [data]);
 
   return (
     <>
@@ -66,18 +73,22 @@ export const Organization: React.FC = () => {
           </div>
           <ul className="flex flex-col gap-3">
             {loading && <CardLoader />}
-            {!loading &&
-              data?.map((v, i) => (
-                <ListCard
-                  children={null}
-                  key={i}
-                  href={`/org/${v._id}`}
-                  headingOne={v.organization}
-                  subHeadingTitle={`admin`}
-                  subHeading={v.admin.name}
-                  description={v.description}
-                />
-              ))}
+            {!loading && !data?.length && (
+              <p className="text-slate-400">
+                You currently not a member of any organization
+              </p>
+            )}
+            {data?.map((v, i) => (
+              <ListCard
+                children={null}
+                key={i}
+                href={`/org/${v._id}`}
+                headingOne={v.organization}
+                subHeadingTitle={`admin`}
+                subHeading={v.admin.name}
+                description={v.description}
+              />
+            ))}
           </ul>
         </div>
       </div>
