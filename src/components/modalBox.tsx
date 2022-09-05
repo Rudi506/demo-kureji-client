@@ -1,6 +1,7 @@
-import { logoutBtn } from "../../types/types";
+import React, { FormEvent, useState } from "react";
+import { DeleteModalTypes, logoutBtn } from "../../types/types";
 import { api } from "../../utils/api";
-import { setAccessToken } from "../utils/accesstoken";
+import { getAccessToken, setAccessToken } from "../utils/accesstoken";
 
 export const ModalBox: React.FC<{
   isOpen: boolean;
@@ -67,15 +68,6 @@ export const LogoutModal: React.FC<logoutBtn> = ({
   msg,
   callFunction,
 }) => {
-  const Logout = () => {
-    api
-      .post(`/logout`)
-      .then((result) => {
-        setAccessToken("");
-        location.reload();
-      })
-      .catch((err) => console.error(err));
-  };
   return (
     <div
       className={`${
@@ -96,6 +88,86 @@ export const LogoutModal: React.FC<logoutBtn> = ({
         >
           keluar
         </button>
+      </div>
+    </div>
+  );
+};
+
+export const DeleteModal: React.FC<DeleteModalTypes> = ({
+  showDeleteModal,
+  reqCloseBtn,
+  children,
+  deletedItem,
+  URI,
+  type,
+}) => {
+  const itemlowercase = deletedItem.toLocaleLowerCase().split(" ").join("");
+  const accessToken = getAccessToken();
+  const [orgInput, setOrgInput] = useState("");
+
+  const handleChange = (e: { target: { value: string } }) => {
+    const { value } = e.target;
+
+    setOrgInput(value);
+  };
+  const isMatched = orgInput === itemlowercase;
+  const submitDelete = (e: React.FormEvent) => {
+    e.preventDefault();
+    api
+      .delete(URI, {
+        headers: {
+          "auth-token": accessToken ? `Bearer ${accessToken}` : "",
+        },
+      })
+      .then(async (result) => {
+        console.log(result);
+        if (type === "user") {
+          await api.post("/logout");
+          location.replace("/");
+        }
+        if (type === "org") {
+          location.replace("/org");
+        }
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
+  return (
+    <div
+      className={`${
+        !showDeleteModal && "hidden"
+      } fixed  left-0 top-0 w-full h-full  z-30 bg-blue-500/5 backdrop-blur-sm w- shadow-xl outline outline-2 outline-blue-500/30 rounded-md flex justify-items-center`}
+    >
+      <div className="relative w-fit m-auto my-auto bg-white pt-10 pb-3 px-20 outline-2 outline outline-blue-600/20  flex flex-col gap-5 justify-center ">
+        <button
+          className="absolute top-2 right-2 text-sm"
+          onClick={() => reqCloseBtn(false)}
+        >
+          ✖
+        </button>
+        {children}
+
+        <form className="flex flex-col gap-2">
+          <label htmlFor="deleteinput">
+            Silahkan ketikan <strong>{itemlowercase}</strong> untuk konfirmasi.
+          </label>
+          <input
+            onChange={handleChange}
+            value={orgInput}
+            type="text"
+            name="deleteinput"
+            id="deleteinput"
+            className="rounded-lg border-black border-1 border px-0.5 py-1"
+          />
+          <button
+            disabled={!isMatched}
+            className="p-3 py-2 w-fit text-white rounded-xl bg-red-500 disabled:bg-red-200 self-center"
+            onClick={submitDelete}
+          >
+            Delete
+          </button>
+        </form>
       </div>
     </div>
   );
