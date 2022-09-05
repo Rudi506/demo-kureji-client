@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router";
 import { eventDetail } from "../../types/types";
 import { api } from "../../utils/api";
-import { ChartVote } from "../components/ChartVote";
+import { SubHeading } from "../components/Heading";
+import { CandidatesCard } from "../components/ListCard";
 import { Loader } from "../components/Loader";
 import { ModalBox } from "../components/modalBox";
 import { Navbar } from "../components/navbar";
@@ -134,47 +135,15 @@ export const VotePage: React.FC = () => {
           </div>
 
           <div id="candidateCards" className="flex flex-col gap-5">
-            <h2 className="text-xl font-semibold">Candidates:</h2>
+            <SubHeading>Candidates:</SubHeading>
             <ul className="flex flex-col md:flex-row flex-wrap gap-10 justify-center">
               {Data?.candidates.map((v, i) => (
-                <li
+                <CandidatesCard
                   key={i}
-                  className="grow md:basis-1/3 md:max-w-[30%] rounded-xl outline-1 outline outline-slate-400 px-2 pt-6 pb-4 flex flex-col gap-2 shadow-xl min-h-[300px] relative"
-                >
-                  <p className="absolute text-xs text-slate-300 right-0 top-0 p-2 -z-10">
-                    candidateId: {v._id}
-                  </p>
-                  <div id="candidateCard" className="flex flex-col gap-2 grow">
-                    <div id="title" className="flex flex-col text-center">
-                      <h1>{v.calonKetua}</h1>
-                      {v.calonWakil && (
-                        <>
-                          &amp;<h1>{v.calonWakil}</h1>
-                        </>
-                      )}
-                    </div>
-                    <div id="description" className="grow">
-                      <h2>description:</h2>
-                      <p
-                        id="description"
-                        className="max-h-[200px] overflow-auto rounded-md"
-                      >
-                        {v.description}
-                      </p>
-                    </div>
-                    {!HasVoted && (
-                      <button
-                        data-ketua={v.calonKetua}
-                        data-wakil={v.calonWakil}
-                        id={v._id}
-                        className="bg-blue-600 text-white px-2 py-1 rounded-xl self-center"
-                        onClick={(e) => handleModal(e)}
-                      >
-                        Vote
-                      </button>
-                    )}
-                  </div>
-                </li>
+                  candidate={v}
+                  hasVoted={HasVoted}
+                  handleModal={() => handleModal}
+                />
               ))}
             </ul>
           </div>
