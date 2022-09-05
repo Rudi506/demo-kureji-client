@@ -2,15 +2,16 @@ import { SetStateAction, useCallback, useEffect, useState } from "react";
 import { api } from "../../utils/api";
 import { Navbar } from "../components/navbar";
 import { getAccessToken } from "../utils/accesstoken";
-import { Link } from "react-router-dom";
-import { DataMapped } from "../../types/types";
+import { organization } from "../../types/types";
 import { CreateOrgModal } from "../components/createOrg";
 import { CardLoader } from "../components/Loader";
 import { SuccessModal } from "../components/modalBox";
+import { ListCard } from "../components/ListCard";
+import { MainHeading } from "../components/Heading";
 
 export const Organization: React.FC = () => {
   const accessToken = getAccessToken();
-  const [data, setData] = useState([]);
+  const [data, setData] = useState<organization[]>();
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsOpen] = useState(false);
   const callback = useCallback((handle: SetStateAction<boolean>) => {
@@ -52,7 +53,7 @@ export const Organization: React.FC = () => {
             setAnim={(bool) => setAnim(bool)}
           />
           <div id="header" className="flex justify-between">
-            <h1 className="text-xl font-bold text-gray-500">My Organization</h1>
+            <MainHeading>My Organization</MainHeading>
             <button
               onClick={() => setIsOpen(true)}
               id="addBtn"
@@ -66,26 +67,16 @@ export const Organization: React.FC = () => {
           <ul className="flex flex-col gap-3">
             {loading && <CardLoader />}
             {!loading &&
-              data.map((v: DataMapped, i) => (
-                <li key={i}>
-                  <Link to={`/org/${v._id}`}>
-                    <div
-                      id="card"
-                      className="border-2 border-gray-300 rounded-lg shadow-md shadow-gray-500 px-2 py-2 flex flex-col gap-2"
-                    >
-                      <div className="">
-                        <h1 className="text-lg font-semibold">
-                          {v.organization}
-                        </h1>
-                        <p className="text-gray-500 text-xs">
-                          admin: {v.admin.name}
-                        </p>
-                      </div>
-
-                      <p className="text-xs">{v.description}</p>
-                    </div>
-                  </Link>
-                </li>
+              data?.map((v, i) => (
+                <ListCard
+                  children={null}
+                  key={i}
+                  href={`/org/${v._id}`}
+                  headingOne={v.organization}
+                  subHeadingTitle={`admin`}
+                  subHeading={v.admin.name}
+                  description={v.description}
+                />
               ))}
           </ul>
         </div>
