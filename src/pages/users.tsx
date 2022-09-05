@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { user } from "../../types/types";
 import { api } from "../../utils/api";
+import { ListComponent } from "../components/ListComponent";
 import { Loader } from "../components/Loader";
 import { LogoutModal } from "../components/modalBox";
 import { Navbar } from "../components/navbar";
@@ -86,12 +87,15 @@ function Users() {
                 <>Anda belum pernah berpartisipasi dalam voting</>
               ) : (
                 User?.voteParticipation.map((v, i) => (
-                  <Link to={`/org/${v.holder._id}/event/${v._id}`} key={i}>
-                    <li className={`odd:bg-slate-200 p-3`}>
+                  <ListComponent key={i}>
+                    <Link
+                      className="w-full h-full"
+                      to={`/org/${v.holder._id}/event/${v._id}`}
+                    >
                       <h1 className="text-md font-semibold">{v.voteTitle}</h1>
                       <p>holder: {v.holder.organization}</p>
-                    </li>
-                  </Link>
+                    </Link>
+                  </ListComponent>
                 ))
               )}
             </ul>
