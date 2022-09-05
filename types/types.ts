@@ -1,9 +1,3 @@
-export interface DataMapped {
-  organization: String;
-  admin: { name: String };
-  description: String;
-  _id: String;
-}
 export interface createOrg {
   isOpen: Boolean;
   closeBtn: (arg: boolean) => void;
@@ -15,15 +9,6 @@ export interface addEvent {
   isOpen: Boolean;
   closeBtn: (arg: boolean) => void;
   orgId: String | undefined;
-}
-
-export interface orgDetail {
-  admin: { name: String };
-  _id: String;
-  organization: String;
-  description: String;
-  members: [];
-  voteEvents: [];
 }
 
 export interface eventDetail {
@@ -63,7 +48,15 @@ export interface organization {
   description: string;
   admin: { _id: string; name: string; email: string };
   members: user[];
-  voteEvents: [];
+  voteEvents: voteEvents[];
+}
+
+export interface candidates {
+  _id: string;
+  calonKetua: string;
+  calonWakil: string;
+  description: string;
+  numOfVotes: number;
 }
 
 export interface voteEvents {
@@ -72,11 +65,16 @@ export interface voteEvents {
   holder: organization;
   isActive: boolean;
   finishedDate: Date;
-  candidates: {
-    calonKetua: string;
-    calonWakil: string;
-    description: string;
-    numOfVotes: number;
-  }[];
+  candidates: candidates[];
   registeredVoters: { voter: user; hasVoted: boolean }[];
+}
+
+export interface ListCardTypes {
+  key: number;
+  href: string;
+  headingOne: String;
+  subHeadingTitle: string;
+  subHeading: String;
+  description: String;
+  children: React.ReactNode;
 }
