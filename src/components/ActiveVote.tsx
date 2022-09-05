@@ -2,8 +2,9 @@ import { useState, useEffect } from "react";
 import { api } from "../../utils/api";
 import { getAccessToken } from "../utils/accesstoken";
 import { user, voteEvents } from "../../types/types";
-import { Link } from "react-router-dom";
-import { CardLoader, Loader } from "./Loader";
+import { CardLoader } from "./Loader";
+import { ListCard } from "./ListCard";
+import { MainHeading } from "./Heading";
 
 export const VoteEvent: React.FC = () => {
   const [eventList, setEventList] = useState<voteEvents[]>();
@@ -50,7 +51,7 @@ export const VoteEvent: React.FC = () => {
   return (
     <>
       <div className="flex flex-col gap-5">
-        <h1 className="text-xl font-bold text-gray-500">Active Vote</h1>
+        <MainHeading>Active Vote</MainHeading>
         <ul className="flex flex-col gap-3">
           {Loading ? (
             <CardLoader />
@@ -58,30 +59,19 @@ export const VoteEvent: React.FC = () => {
             <p className="text-slate-400">No active voting currently</p>
           ) : (
             eventList.map((v, i) => (
-              <li key={i}>
-                <Link to={`/org/${v.holder._id}/event/${v._id}`}>
-                  <div
-                    id="card"
-                    className="border-2 border-gray-300 rounded-lg shadow-md shadow-gray-500 px-2 py-2 flex flex-col gap-2"
-                  >
-                    <div className="">
-                      <h1 className="text-lg font-semibold">{v.voteTitle}</h1>
-                      <p className="text-gray-500 text-xs">
-                        organization: {v.holder.organization}
-                      </p>
-                    </div>
-
-                    <div className="text-xs flex gap-1">
-                      kandidat:
-                      {v.candidates.map((v, i) => (
-                        <p key={i} className="even:before:content-['_vs_']">
-                          {v.calonKetua} &amp; {v.calonWakil}
-                        </p>
-                      ))}
-                    </div>
-                  </div>
-                </Link>
-              </li>
+              <ListCard
+                key={i}
+                href={`/org/${v.holder._id}/event/${v._id}`}
+                headingOne={v.voteTitle}
+                subHeadingTitle={`organization`}
+                subHeading={v.holder.organization}
+                children={v.candidates.map((v, i) => (
+                  <p key={i} className="even:before:content-['_vs_']">
+                    {v.calonKetua} &amp; {v.calonWakil}
+                  </p>
+                ))}
+                description={""}
+              />
             ))
           )}
         </ul>
