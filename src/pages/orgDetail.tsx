@@ -1,16 +1,17 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { orgDetail } from "../../types/types";
+import { organization } from "../../types/types";
 import { api } from "../../utils/api";
 import { ActiveEventList } from "../components/activeEventList";
 import { AddMemberModal } from "../components/addMember";
+import { ListComponent } from "../components/ListComponent";
 import { Loader } from "../components/Loader";
 import { Navbar } from "../components/navbar";
 import { getAccessToken } from "../utils/accesstoken";
 
 export const OrgDetail: React.FC = () => {
   const { orgId } = useParams<{ orgId: string }>();
-  const [Data, setData] = useState<orgDetail>();
+  const [Data, setData] = useState<organization>();
   const [Loading, setLoading] = useState<boolean>(true);
   const [isMemberModalOpen, setMemberModalOpen] = useState<boolean>(false);
   const [isAdmin, setIsAdmin] = useState(false);
@@ -96,18 +97,17 @@ export const OrgDetail: React.FC = () => {
             />
             <ul className="border-b-2 border-slate-400 pb-5">
               {Data?.members.map((v: { name: String }, i) => (
-                <li
-                  className="flex p-2 my-auto odd:bg-slate-300 justify-between items-center"
-                  key={i}
-                >
-                  <p>{v.name} </p>
-                  {v.name === Data.admin.name && (
-                    <p className="p-1 px-2 bg-yellow-500 rounded-xl text-gray-700">
-                      {" "}
-                      admin
-                    </p>
-                  )}
-                </li>
+                <ListComponent key={i}>
+                  <div className="flex justify-between items-center">
+                    <p>{v.name} </p>
+                    {v.name === Data.admin.name && (
+                      <p className="p-1 px-2 bg-yellow-500 rounded-xl text-gray-700">
+                        {" "}
+                        admin
+                      </p>
+                    )}
+                  </div>
+                </ListComponent>
               ))}
             </ul>
           </div>
