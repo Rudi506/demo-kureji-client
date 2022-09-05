@@ -1,5 +1,6 @@
 import { eventDetail } from "../../types/types";
 import { ChartVote } from "./ChartVote";
+import { SubHeading } from "./Heading";
 
 export const VoteResult: React.FC<{
   eventData: eventDetail;
@@ -12,7 +13,7 @@ export const VoteResult: React.FC<{
   const isThirty = percentVoted >= minPercent ? true : false;
   return (
     <div id="result">
-      <h1 className="text-lg font-semibold pb-1">Result</h1>
+      <SubHeading>Result</SubHeading>
       <p>
         vote Collected: {sumVoted}/{eventData.registeredVoters.length} ({" "}
         {percentVoted}% )
