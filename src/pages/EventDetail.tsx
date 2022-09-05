@@ -171,7 +171,7 @@ export const EventDetail = () => {
             <SubHeading>Candidates</SubHeading>
             <ul className="border-b-2 border-slate-400">
               {Data?.candidates.map((v, i) => (
-                <ListComponent key={i}>
+                <ListComponent index={i}>
                   <div id="candidate" className="flex gap-2">
                     <p>Kandidat:</p>
                     <h2 className="flex gap-1">
@@ -191,7 +191,7 @@ export const EventDetail = () => {
             <SubHeading>Participants</SubHeading>
             <ul className="border-b-2 border-slate-400">
               {Data?.registeredVoters.map((v, i) => (
-                <ListComponent key={i}>{v.voter.name}</ListComponent>
+                <ListComponent index={i}>{v.voter.name}</ListComponent>
               ))}
             </ul>
           </div>
