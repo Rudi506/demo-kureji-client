@@ -7,6 +7,8 @@ import { Loader } from "../components/Loader";
 import { Navbar } from "../components/navbar";
 import { getAccessToken } from "../utils/accesstoken";
 import { VoteResult } from "../components/VoteResult";
+import { ListComponent } from "../components/ListComponent";
+import { SubHeading } from "../components/Heading";
 
 export const EventDetail = () => {
   const { eventId, orgId } = useParams();
@@ -166,10 +168,10 @@ export const EventDetail = () => {
             </div>
           </div>
           <div id="candidates">
-            <h2 className="text-lg font-semibold pb-1">Candidates</h2>
+            <SubHeading>Candidates</SubHeading>
             <ul className="border-b-2 border-slate-400">
               {Data?.candidates.map((v, i) => (
-                <li key={i} className={`odd:bg-slate-200  p-2`}>
+                <ListComponent key={i}>
                   <div id="candidate" className="flex gap-2">
                     <p>Kandidat:</p>
                     <h2 className="flex gap-1">
@@ -181,17 +183,15 @@ export const EventDetail = () => {
                     <p>description: </p>
                     <p>{v.description}</p>
                   </div>
-                </li>
+                </ListComponent>
               ))}
             </ul>
           </div>
           <div id="voters">
-            <h2 className="text-lg font-semibold pb-1">Participants</h2>
+            <SubHeading>Participants</SubHeading>
             <ul className="border-b-2 border-slate-400">
               {Data?.registeredVoters.map((v, i) => (
-                <li key={i} className={`odd:bg-slate-300 p-2`}>
-                  {v.voter.name}
-                </li>
+                <ListComponent key={i}>{v.voter.name}</ListComponent>
               ))}
             </ul>
           </div>
