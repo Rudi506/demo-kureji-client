@@ -67,9 +67,7 @@ export const AddMemberModal: React.FC<{
       })
       .catch((err) => console.log(err));
   };
-  return !isAdmin ? (
-    <></>
-  ) : (
+  return !isAdmin ? null : (
     <>
       <p
         className={`fixed py-3 px-5 mr-10 bg-green-400 font-semibold text-white right-2 md:right-0 rounded-xl gap-x-5 flex transition-[top] ease-in-out ${
@@ -81,7 +79,7 @@ export const AddMemberModal: React.FC<{
       </p>
       <form onSubmit={searchSubmit} className={`relative`}>
         <div
-          className={` w-[98%] md:w-[50%] h-fit rounded-xl p-3 pt-4 border-2 border-gray-400 bg-white flex gap-3 ${
+          className={`md:w-[50%] h-fit rounded-xl p-3 pt-4 border-2 border-gray-400 bg-white flex gap-3 ${
             !isOpen ? "hidden" : ""
           }`}
         >
