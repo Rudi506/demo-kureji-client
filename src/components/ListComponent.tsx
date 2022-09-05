@@ -1,11 +1,11 @@
 import { ReactNode } from "react";
 
-export const ListComponent: React.FC<{ key: number; children: ReactNode }> = ({
-  key,
-  children,
-}) => {
+export const ListComponent: React.FC<{
+  index: number;
+  children: ReactNode;
+}> = ({ index, children }) => {
   return (
-    <li key={key} className={`odd:bg-slate-200 p-3`}>
+    <li key={index} className={`odd:bg-slate-200 p-3`}>
       {children}
     </li>
   );
