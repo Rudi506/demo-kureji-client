@@ -4,9 +4,12 @@ import { organization } from "../../types/types";
 import { api } from "../../utils/api";
 import { ActiveEventList } from "../components/activeEventList";
 import { AddMemberModal } from "../components/addMember";
+import { SubHeading } from "../components/Heading";
 import { ListComponent } from "../components/ListComponent";
 import { Loader } from "../components/Loader";
+import { DeleteModal } from "../components/modalBox";
 import { Navbar } from "../components/navbar";
+import { SettingBtn } from "../components/SettingBtn";
 import { getAccessToken } from "../utils/accesstoken";
 
 export const OrgDetail: React.FC = () => {
@@ -15,6 +18,7 @@ export const OrgDetail: React.FC = () => {
   const [Loading, setLoading] = useState<boolean>(true);
   const [isMemberModalOpen, setMemberModalOpen] = useState<boolean>(false);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   useEffect(() => {
     const accessToken = getAccessToken();
@@ -46,16 +50,35 @@ export const OrgDetail: React.FC = () => {
             Loading && "hidden"
           } px-5 py-3 w-screen flex flex-col gap-y-14 relative max-h-screen overflow-auto pb-32`}
         >
-          <div id="head">
-            <h1 className="text-xl">{Data?.organization}</h1>
+          <div id="head" className="relative">
+            <DeleteModal
+              type="org"
+              reqCloseBtn={(arg) => setShowDeleteModal(arg)}
+              showDeleteModal={showDeleteModal}
+              deletedItem={Data?.organization || ""}
+              URI={`/org/${orgId}`}
+            >
+              <p>
+                Yakin ingin menghapus <strong>{Data?.organization}</strong>?{" "}
+                <br /> aksi ini akan{" "}
+                <strong> menghapus organisasi dan riwayat acara</strong> secara
+                permanen
+              </p>
+            </DeleteModal>
+            {isAdmin && (
+              <SettingBtn
+                showDeleteModal={() => null}
+                type=""
+                showModal={(arg) => setShowDeleteModal(arg)}
+              />
+            )}
+            <h1 className="text-xl font-bold">{Data?.organization}</h1>
             <p className="leading-loose">{Data?.description}</p>
           </div>
 
           <div id="activeEvents" className="flex flex-col gap-6">
             <div id="header2" className="flex justify-between">
-              <h2 className="text-lg underline-offset-1 underline text-gray-700">
-                Events
-              </h2>
+              <SubHeading>Events</SubHeading>
               {isAdmin && (
                 <Link
                   to={`/org/${orgId}/create_event`}
@@ -71,9 +94,7 @@ export const OrgDetail: React.FC = () => {
           <div id="members" className="flex flex-col gap-6">
             <div id="header2" className="flex justify-between">
               <div className="wrap flex items-center gap-3">
-                <h2 className="text-lg underline-offset-1 underline text-gray-700">
-                  members
-                </h2>
+                <SubHeading>members</SubHeading>
                 &#40;{Data?.members.length} anggota &#41;
               </div>
               {isAdmin && (
@@ -97,7 +118,7 @@ export const OrgDetail: React.FC = () => {
             />
             <ul className="border-b-2 border-slate-400 pb-5">
               {Data?.members.map((v: { name: String }, i) => (
-                <ListComponent key={i}>
+                <ListComponent index={i}>
                   <div className="flex justify-between items-center">
                     <p>{v.name} </p>
                     {v.name === Data.admin.name && (
