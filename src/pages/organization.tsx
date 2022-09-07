@@ -29,7 +29,8 @@ export const Organization: React.FC = () => {
         const { data }: { data: organization[] } = result.data;
         setData(
           data.filter((v) => {
-            if (v.admin) v;
+            if (!v.admin.length) null;
+            return v;
           })
         );
         setLoading(false);
@@ -38,9 +39,6 @@ export const Organization: React.FC = () => {
         setLoading(false);
       });
   }, []);
-  useEffect(() => {
-    console.log(data);
-  }, [data]);
 
   return (
     <>
@@ -85,7 +83,7 @@ export const Organization: React.FC = () => {
                 href={`/org/${v._id}`}
                 headingOne={v.organization}
                 subHeadingTitle={`admin`}
-                subHeading={v.admin.name}
+                subHeading={v.admin.map((v) => `${v.name}`).toString()}
                 description={v.description}
               />
             ))}
