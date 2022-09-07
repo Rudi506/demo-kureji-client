@@ -117,11 +117,11 @@ export const OrgDetail: React.FC = () => {
               orgId={orgId}
             />
             <ul className="border-b-2 border-slate-400 pb-5">
-              {Data?.members.map((v: { name: String }, i) => (
-                <ListComponent index={i}>
+              {Data?.members.map((v, i) => (
+                <ListComponent key={i}>
                   <div className="flex justify-between items-center">
                     <p>{v.name} </p>
-                    {v.name === Data.admin.name && (
+                    {v.isAdmin && (
                       <p className="p-1 px-2 bg-yellow-500 rounded-xl text-gray-700">
                         {" "}
                         admin
