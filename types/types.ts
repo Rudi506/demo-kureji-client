@@ -48,8 +48,13 @@ export interface organization {
   _id: string;
   organization: string;
   description: string;
-  admin: { _id: string; name: string; email: string };
-  members: user[];
+  admin: { _id: string; name: string; email: string }[];
+  members: {
+    _id: string;
+    email: string;
+    name: string;
+    isAdmin: boolean;
+  }[];
   voteEvents: voteEvents[];
 }
 
