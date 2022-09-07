@@ -39,12 +39,16 @@ export const CreateOrgModal: React.FC<createOrg> = ({
       })
       .then((result) => {
         const { result: data } = result.data;
-        setData(data.organization);
+        setData(data);
         setLoading(false);
         closeBtn(false);
         setAnim(true);
         setMsg("Organisasi berhasil dibuat");
         setForm({ description: "", orgName: "" });
+        setTimeout(() => {
+          setAnim(false);
+          setMsg("");
+        }, 3000);
       })
       .catch((err) => {
         console.error(err);
