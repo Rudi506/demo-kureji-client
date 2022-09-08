@@ -14,7 +14,7 @@ export const ActiveEventList: React.FC<{
           v: { voteTitle: string; _id: string; isActive: boolean },
           i: number
         ) => (
-          <ListComponent index={i}>
+          <ListComponent key={i}>
             <div className="flex items-center justify-between">
               <Link to={`/org/${orgId}/event/${v._id}`}>{v.voteTitle}</Link>
               <p
