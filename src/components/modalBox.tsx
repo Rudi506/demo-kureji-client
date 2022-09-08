@@ -1,4 +1,4 @@
-import React, { FormEvent, useState } from "react";
+import React, { FormEvent, ReactNode, useState } from "react";
 import { DeleteModalTypes, logoutBtn } from "../../types/types";
 import { api } from "../../utils/api";
 import { getAccessToken, setAccessToken } from "../utils/accesstoken";
@@ -168,6 +168,82 @@ export const DeleteModal: React.FC<DeleteModalTypes> = ({
             Delete
           </button>
         </form>
+      </div>
+    </div>
+  );
+};
+
+export const SetAdminModalsBox: React.FC<{
+  showModal: boolean;
+  children: ReactNode;
+  reqCloseBtn: (arg: boolean) => void;
+  URI: string;
+  memberData: { name: string | null; id: string | null };
+  updateData: (arg: any) => void;
+  setMsg: (arg: any) => void;
+  setAnim: (arg: any) => void;
+}> = ({
+  showModal,
+  children,
+  reqCloseBtn,
+  URI,
+  memberData,
+  updateData,
+  setAnim,
+  setMsg,
+}) => {
+  const accessToken = getAccessToken();
+
+  const editMemberHanler = async (id: string | null, name: string | null) => {
+    api
+      .put(
+        URI,
+        { id },
+        {
+          headers: {
+            "auth-token": accessToken ? `Bearer ${accessToken}` : "",
+          },
+        }
+      )
+      .then((result) => {
+        const { result: data } = result.data;
+        updateData(() => data);
+        setMsg(() => "berhasil ditambahkan");
+        setAnim(() => true);
+        setTimeout(() => {
+          setMsg(() => "");
+          setAnim(() => false);
+        }, 1500);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  };
+
+  return (
+    <div
+      className={`${
+        !showModal && "hidden"
+      } fixed  left-0 top-0 w-full h-full  z-30 bg-blue-500/5 backdrop-blur-sm w- shadow-xl outline outline-2 outline-blue-500/30 rounded-md flex justify-items-center`}
+    >
+      <div className="relative w-fit m-auto my-auto bg-white pt-10 pb-3 px-20 outline-2 outline outline-blue-600/20  flex flex-col gap-5 justify-center ">
+        <button
+          className="absolute top-2 right-2 text-sm"
+          onClick={() => reqCloseBtn(true)}
+        >
+          ✖
+        </button>
+        {children}
+        <button
+          type="submit"
+          className="px-2 py-3 bg-yellow-400 font-semibold"
+          onClick={() => {
+            editMemberHanler(memberData.id, memberData.name);
+            reqCloseBtn(true);
+          }}
+        >
+          Yes
+        </button>
       </div>
     </div>
   );
