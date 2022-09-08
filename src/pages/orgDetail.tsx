@@ -162,7 +162,7 @@ export const OrgDetail: React.FC = () => {
             </>
             <ul className="border-b-2 border-slate-400 pb-5">
               {Data?.members.map((v: members, i) => (
-                <ListComponent key={i}>
+                <ListComponent index={i}>
                   <div className="flex relative">
                     <div className="flex justify-between items-center grow">
                       <p className="grow">{v.name} </p>

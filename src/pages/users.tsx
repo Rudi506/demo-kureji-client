@@ -92,7 +92,7 @@ function Users() {
                 <>Anda belum pernah berpartisipasi dalam voting</>
               ) : (
                 User?.voteParticipation.map((v, i) => (
-                  <ListComponent key={i}>
+                  <ListComponent index={i}>
                     <Link
                       className="w-full h-full"
                       to={`/org/${v.holder._id}/event/${v._id}`}
