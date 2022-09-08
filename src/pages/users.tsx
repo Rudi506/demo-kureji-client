@@ -46,10 +46,6 @@ function Users() {
       .catch((err) => console.error(err));
   };
 
-  useEffect(() => {
-    console.log(User);
-  }, [User]);
-
   return (
     <>
       <div className="flex h-screen">
@@ -96,7 +92,7 @@ function Users() {
                 <>Anda belum pernah berpartisipasi dalam voting</>
               ) : (
                 User?.voteParticipation.map((v, i) => (
-                  <ListComponent index={i}>
+                  <ListComponent key={i}>
                     <Link
                       className="w-full h-full"
                       to={`/org/${v.holder._id}/event/${v._id}`}
