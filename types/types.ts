@@ -43,18 +43,19 @@ export interface user {
   organization: organization[];
   voteParticipation: voteEvents[];
 }
+export interface members {
+  _id: string;
+  email: string;
+  name: string;
+  isAdmin: boolean;
+}
 
 export interface organization {
   _id: string;
   organization: string;
   description: string;
   admin: { _id: string; name: string; email: string }[];
-  members: {
-    _id: string;
-    email: string;
-    name: string;
-    isAdmin: boolean;
-  }[];
+  members: members[];
   voteEvents: voteEvents[];
 }
 
