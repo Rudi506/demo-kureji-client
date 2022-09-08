@@ -1,13 +1,18 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
-import { organization } from "../../types/types";
+import { members, organization } from "../../types/types";
 import { api } from "../../utils/api";
 import { ActiveEventList } from "../components/activeEventList";
+import { SetAdmin } from "../components/AddAdmin";
 import { AddMemberModal } from "../components/addMember";
 import { SubHeading } from "../components/Heading";
 import { ListComponent } from "../components/ListComponent";
 import { Loader } from "../components/Loader";
-import { DeleteModal } from "../components/modalBox";
+import {
+  DeleteModal,
+  SetAdminModalsBox,
+  SuccessModal,
+} from "../components/modalBox";
 import { Navbar } from "../components/navbar";
 import { SettingBtn } from "../components/SettingBtn";
 import { getAccessToken } from "../utils/accesstoken";
@@ -18,10 +23,22 @@ export const OrgDetail: React.FC = () => {
   const [Loading, setLoading] = useState<boolean>(true);
   const [isMemberModalOpen, setMemberModalOpen] = useState<boolean>(false);
   const [isAdmin, setIsAdmin] = useState(false);
+  const [userId, setUserId] = useState("");
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [isExpanded, setIsExpanded] = useState<number | null>();
+  const [showSetAdminModal, setShowSetAdminModal] = useState<boolean>(false);
+  const [newAdmin, setNewAdmin] = useState<{
+    name: string | null;
+    id: string | null;
+  }>({
+    name: "",
+    id: "",
+  });
+  const [Msg, setMsg] = useState("");
+  const [Anim, setAnim] = useState<boolean>(false);
+  const accessToken = getAccessToken();
 
   useEffect(() => {
-    const accessToken = getAccessToken();
     api
       .get(`/org/${orgId}`, {
         headers: {
@@ -29,7 +46,8 @@ export const OrgDetail: React.FC = () => {
         },
       })
       .then((result) => {
-        const { result: data, isAdmin } = result.data;
+        const { result: data, isAdmin, userId } = result.data;
+        setUserId(userId);
         setIsAdmin(isAdmin);
         setData(data);
         setLoading(false);
@@ -50,6 +68,15 @@ export const OrgDetail: React.FC = () => {
             Loading && "hidden"
           } px-5 py-3 w-screen flex flex-col gap-y-14 relative max-h-screen overflow-auto pb-32`}
         >
+          <SuccessModal
+            anim={Anim}
+            msg={{ msg: Msg }}
+            setAnim={(anim) => setAnim(anim)}
+          />
+          {
+            // !=============== HEAD COMPONENT =======================
+            // ! ===== Modals are put bellow
+          }
           <div id="head" className="relative">
             <DeleteModal
               type="org"
@@ -65,17 +92,30 @@ export const OrgDetail: React.FC = () => {
                 permanen
               </p>
             </DeleteModal>
+            <SetAdminModalsBox
+              showModal={showSetAdminModal}
+              reqCloseBtn={(arg) => setShowSetAdminModal(!arg)}
+              memberData={newAdmin}
+              URI={`/org/${orgId}/add_admin`}
+              updateData={(data) => setData(data)}
+              setAnim={(boolean) => setAnim(boolean)}
+              setMsg={(msg) => setMsg(msg)}
+            >
+              <p>jadikan {newAdmin.name} sebagi Admin?</p>
+            </SetAdminModalsBox>
             {isAdmin && (
               <SettingBtn
                 showDeleteModal={() => null}
-                type=""
+                type="orgDetailBtn"
                 showModal={(arg) => setShowDeleteModal(arg)}
               />
             )}
             <h1 className="text-xl font-bold">{Data?.organization}</h1>
             <p className="leading-loose">{Data?.description}</p>
           </div>
-
+          {
+            // !========= ACTIVE EVENT COMPONENT ===========
+          }
           <div id="activeEvents" className="flex flex-col gap-6">
             <div id="header2" className="flex justify-between">
               <SubHeading>Events</SubHeading>
@@ -90,7 +130,9 @@ export const OrgDetail: React.FC = () => {
             </div>
             <ActiveEventList orgId={orgId} activeList={Data?.voteEvents} />
           </div>
-
+          {
+            // !================= MEMBER COMPONENT ==============
+          }
           <div id="members" className="flex flex-col gap-6">
             <div id="header2" className="flex justify-between">
               <div className="wrap flex items-center gap-3">
@@ -110,23 +152,67 @@ export const OrgDetail: React.FC = () => {
                 </button>
               )}
             </div>
-            <AddMemberModal
-              updateData={(data) => setData(data)}
-              isAdmin={isAdmin}
-              isOpen={isMemberModalOpen}
-              orgId={orgId}
-            />
+            <>
+              <AddMemberModal
+                updateData={(data) => setData(data)}
+                isAdmin={isAdmin}
+                isOpen={isMemberModalOpen}
+                orgId={orgId}
+              />
+            </>
             <ul className="border-b-2 border-slate-400 pb-5">
-              {Data?.members.map((v, i) => (
+              {Data?.members.map((v: members, i) => (
                 <ListComponent key={i}>
-                  <div className="flex justify-between items-center">
-                    <p>{v.name} </p>
-                    {v.isAdmin && (
-                      <p className="p-1 px-2 bg-yellow-500 rounded-xl text-gray-700">
-                        {" "}
-                        admin
-                      </p>
-                    )}
+                  <div className="flex relative">
+                    <div className="flex justify-between items-center grow">
+                      <p className="grow">{v.name} </p>
+                      {v.isAdmin && (
+                        <p className="p-1 px-2 bg-yellow-500 rounded-xl text-gray-700">
+                          {" "}
+                          admin
+                        </p>
+                      )}
+                    </div>
+                    <div className={`max-h-full ${isAdmin && "w-10"}`}>
+                      {
+                        // !============= MEMBER OPTION Button ===============
+                      }
+                      {isExpanded === i && (
+                        <SetAdmin
+                          memberData={v}
+                          openModal={(arg) => {
+                            setShowSetAdminModal(arg);
+                            setIsExpanded(null);
+                          }}
+                          AddedAdmin={(id, name) => setNewAdmin({ id, name })}
+                        />
+                      )}
+                      {
+                        // !============== Setting Button ===================
+                      }
+                      {v._id !== userId && isAdmin && (
+                        <>
+                          <button
+                            onClick={() =>
+                              isExpanded === i
+                                ? setIsExpanded(null)
+                                : setIsExpanded(i)
+                            }
+                            id="settingbtn"
+                            className="right-0 top-0 w-10 h-full flex justify-center items-center rounded-full "
+                          >
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              viewBox="0 0 128 512"
+                              className="h-5 w-1 fill-gray-600"
+                            >
+                              {/* <!--! Font Awesome Pro 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --> */}
+                              <path d="M64 360c30.9 0 56 25.1 56 56s-25.1 56-56 56s-56-25.1-56-56s25.1-56 56-56zm0-160c30.9 0 56 25.1 56 56s-25.1 56-56 56s-56-25.1-56-56s25.1-56 56-56zM120 96c0 30.9-25.1 56-56 56S8 126.9 8 96S33.1 40 64 40s56 25.1 56 56z" />
+                            </svg>
+                          </button>
+                        </>
+                      )}
+                    </div>
                   </div>
                 </ListComponent>
               ))}
