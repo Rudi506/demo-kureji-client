@@ -1,10 +1,10 @@
 import { members } from "../../types/types";
 
-export const SetAdmin: React.FC<{
+export const SetMembers: React.FC<{
   memberData: members;
-  openModal: (arg: boolean) => void;
-  AddedAdmin: (id: string | null, name: string | null) => void;
-}> = ({ memberData, openModal, AddedAdmin }) => {
+  openModal: (arg: string) => void;
+  memberToBeSet: (id: string | null, name: string | null) => void;
+}> = ({ memberData, openModal, memberToBeSet }) => {
   return (
     <div
       className={` absolute right-10 bg-white px-2 py-3 rounded-md outline outline-1 outline-slate-400 drop-shadow-md border-black h-fit w-fit z-10`}
@@ -21,8 +21,8 @@ export const SetAdmin: React.FC<{
                   e.currentTarget.getAttribute("data-admin-id");
                 const newAdminName =
                   e.currentTarget.getAttribute("data-admin-name");
-                openModal(true);
-                AddedAdmin(newAdminId, newAdminName);
+                openModal("removeAdmin");
+                memberToBeSet(newAdminId, newAdminName);
               }}
             >
               Remove {memberData.name} from admin
@@ -39,8 +39,8 @@ export const SetAdmin: React.FC<{
                   e.currentTarget.getAttribute("data-admin-id");
                 const newAdminName =
                   e.currentTarget.getAttribute("data-admin-name");
-                openModal(true);
-                AddedAdmin(newAdminId, newAdminName);
+                openModal("setAdmin");
+                memberToBeSet(newAdminId, newAdminName);
               }}
             >
               Set {memberData.name} as admin
@@ -49,8 +49,20 @@ export const SetAdmin: React.FC<{
         )}
         {!memberData.isAdmin && (
           <li className="border-b-2 border-slate-400">
-            <button className="w-full h-full text-left hover:bg-red-500 hover:text-white pr-1">
-              Remove {memberData.name}
+            <button
+              className="w-full h-full text-left hover:bg-red-500 hover:text-white pr-1"
+              data-member-id={memberData._id}
+              data-member-name={memberData.name}
+              onClick={(e) => {
+                const dataMemberId =
+                  e.currentTarget.getAttribute("data-member-id");
+                const dataMemberName =
+                  e.currentTarget.getAttribute("data-member-name");
+                openModal("removeMember");
+                memberToBeSet(dataMemberId, dataMemberName);
+              }}
+            >
+              Remove {memberData.name} from organization
             </button>
           </li>
         )}
