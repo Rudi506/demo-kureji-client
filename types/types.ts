@@ -95,3 +95,15 @@ export interface DeleteModalTypes {
   URI: string;
   type: string;
 }
+
+export interface MemberSetting {
+  showModal: boolean;
+  children: ReactNode;
+  reqCloseBtn: (arg: string | null) => void;
+  URI: string;
+  memberData: { name: string | null; id: string | null };
+  updateData: (arg: any) => void;
+  setMsg: (arg: any) => void;
+  setAnim: (arg: any) => void;
+  type: string | null;
+}
