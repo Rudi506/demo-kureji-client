@@ -5,8 +5,8 @@ export const ListComponent: React.FC<{
   children: ReactNode;
 }> = ({ index, children }) => {
   return (
-    <li key={index} className={`odd:bg-slate-200 p-3`}>
-      {children}
+    <li key={index} className={`odd:bg-slate-200 px-3`}>
+      <div className="flex relative">{children}</div>
     </li>
   );
 };
