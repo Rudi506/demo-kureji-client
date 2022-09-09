@@ -172,16 +172,18 @@ export const EventDetail = () => {
             <ul className="border-b-2 border-slate-400">
               {Data?.candidates.map((v, i) => (
                 <ListComponent index={i}>
-                  <div id="candidate" className="flex gap-2">
-                    <p>Kandidat:</p>
-                    <h2 className="flex gap-1">
-                      {v.calonKetua} {v.calonWakil && <p>&amp;</p>}{" "}
-                      {v.calonWakil}
-                    </h2>
-                  </div>
-                  <div id="description" className="flex gap-2">
-                    <p>description: </p>
-                    <p>{v.description}</p>
+                  <div className="flex flex-col py-1">
+                    <div id="candidate" className="flex gap-2">
+                      <p>Kandidat:</p>
+                      <h2 className="flex gap-1">
+                        {v.calonKetua} {v.calonWakil && <p>&amp;</p>}{" "}
+                        {v.calonWakil}
+                      </h2>
+                    </div>
+                    <div id="description" className="flex gap-2">
+                      <p>description: </p>
+                      <p>{v.description}</p>
+                    </div>
                   </div>
                 </ListComponent>
               ))}
@@ -191,7 +193,9 @@ export const EventDetail = () => {
             <SubHeading>Participants</SubHeading>
             <ul className="border-b-2 border-slate-400">
               {Data?.registeredVoters.map((v, i) => (
-                <ListComponent index={i}>{v.voter.name}</ListComponent>
+                <ListComponent index={i}>
+                  <div className="py-2">{v.voter.name}</div>
+                </ListComponent>
               ))}
             </ul>
           </div>
