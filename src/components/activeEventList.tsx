@@ -15,7 +15,7 @@ export const ActiveEventList: React.FC<{
           i: number
         ) => (
           <ListComponent index={i}>
-            <div className="flex items-center justify-between">
+            <div className="flex grow py-1.5 items-center justify-between">
               <Link to={`/org/${orgId}/event/${v._id}`}>{v.voteTitle}</Link>
               <p
                 className={`${
