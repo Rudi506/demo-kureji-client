@@ -3,14 +3,14 @@ import { Link, useParams } from "react-router-dom";
 import { members, organization } from "../../types/types";
 import { api } from "../../utils/api";
 import { ActiveEventList } from "../components/activeEventList";
-import { SetAdmin } from "../components/AddAdmin";
+import { SetMembers } from "../components/SetMembers";
 import { AddMemberModal } from "../components/addMember";
 import { SubHeading } from "../components/Heading";
 import { ListComponent } from "../components/ListComponent";
 import { Loader } from "../components/Loader";
 import {
   DeleteModal,
-  SetAdminModalsBox,
+  SetMembersModalsBox,
   SuccessModal,
 } from "../components/modalBox";
 import { Navbar } from "../components/navbar";
@@ -26,8 +26,10 @@ export const OrgDetail: React.FC = () => {
   const [userId, setUserId] = useState("");
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [isExpanded, setIsExpanded] = useState<number | null>();
-  const [showSetAdminModal, setShowSetAdminModal] = useState<boolean>(false);
-  const [newAdmin, setNewAdmin] = useState<{
+  const [showSetMemberModal, setShowSetMemberModal] = useState<string | null>(
+    null
+  );
+  const [member, setMember] = useState<{
     name: string | null;
     id: string | null;
   }>({
@@ -92,17 +94,34 @@ export const OrgDetail: React.FC = () => {
                 permanen
               </p>
             </DeleteModal>
-            <SetAdminModalsBox
-              showModal={showSetAdminModal}
-              reqCloseBtn={(arg) => setShowSetAdminModal(!arg)}
-              memberData={newAdmin}
-              URI={`/org/${orgId}/add_admin`}
+            <SetMembersModalsBox
+              type={showSetMemberModal}
+              showModal={showSetMemberModal !== null}
+              reqCloseBtn={(arg) => setShowSetMemberModal(arg)}
+              memberData={member}
+              URI={
+                showSetMemberModal === "setAdmin"
+                  ? `/org/${orgId}/add_admin`
+                  : showSetMemberModal === "removeAdmin"
+                  ? `/org/${orgId}/remove_admin`
+                  : showSetMemberModal === "removeMember"
+                  ? `/org/${orgId}/remove_member`
+                  : ""
+              }
               updateData={(data) => setData(data)}
               setAnim={(boolean) => setAnim(boolean)}
               setMsg={(msg) => setMsg(msg)}
             >
-              <p>jadikan {newAdmin.name} sebagi Admin?</p>
-            </SetAdminModalsBox>
+              {showSetMemberModal === "setAdmin" && (
+                <p>jadikan {member.name} sebagi Admin?</p>
+              )}
+              {showSetMemberModal === "removeAdmin" && (
+                <p>hapus {member.name} dari Admin?</p>
+              )}
+              {showSetMemberModal === "removeMember" && (
+                <p>hapus {member.name} dari Organisasi?</p>
+              )}
+            </SetMembersModalsBox>
             {isAdmin && (
               <SettingBtn
                 showDeleteModal={() => null}
@@ -163,56 +182,53 @@ export const OrgDetail: React.FC = () => {
             <ul className="border-b-2 border-slate-400 pb-5">
               {Data?.members.map((v: members, i) => (
                 <ListComponent index={i}>
-                  <div className="flex relative">
-                    <div className="flex justify-between items-center grow">
-                      <p className="grow">{v.name} </p>
-                      {v.isAdmin && (
-                        <p className="p-1 px-2 bg-yellow-500 rounded-xl text-gray-700">
-                          {" "}
-                          admin
-                        </p>
-                      )}
-                    </div>
-                    <div className={`max-h-full ${isAdmin && "w-10"}`}>
-                      {
-                        // !============= MEMBER OPTION Button ===============
-                      }
-                      {isExpanded === i && (
-                        <SetAdmin
-                          memberData={v}
-                          openModal={(arg) => {
-                            setShowSetAdminModal(arg);
-                            setIsExpanded(null);
-                          }}
-                          AddedAdmin={(id, name) => setNewAdmin({ id, name })}
-                        />
-                      )}
-                      {
-                        // !============== Setting Button ===================
-                      }
-                      {v._id !== userId && isAdmin && (
-                        <>
-                          <button
-                            onClick={() =>
-                              isExpanded === i
-                                ? setIsExpanded(null)
-                                : setIsExpanded(i)
-                            }
-                            id="settingbtn"
-                            className="right-0 top-0 w-10 h-full flex justify-center items-center rounded-full "
+                  <div className="flex justify-between items-center grow py-1">
+                    <p className="grow py-1">{v.name} </p>
+                    {v.isAdmin && (
+                      <p className="p-1 font-semibold bg-yellow-500 rounded-xl text-gray-700 flex justify-center ">
+                        admin
+                      </p>
+                    )}
+                  </div>
+                  <div className={`max-h-full ${isAdmin && "w-10"}`}>
+                    {
+                      // !============= MEMBER OPTION Button ===============
+                    }
+                    {isExpanded === i && (
+                      <SetMembers
+                        memberData={v}
+                        openModal={(arg) => {
+                          setShowSetMemberModal(arg);
+                          setIsExpanded(null);
+                        }}
+                        memberToBeSet={(id, name) => setMember({ id, name })}
+                      />
+                    )}
+                    {
+                      // !============== Setting Button ===================
+                    }
+                    {v._id !== userId && isAdmin && (
+                      <>
+                        <button
+                          onClick={() =>
+                            isExpanded === i
+                              ? setIsExpanded(null)
+                              : setIsExpanded(i)
+                          }
+                          id="settingbtn"
+                          className="right-0 top-0 w-10 h-full flex justify-center items-center rounded-full "
+                        >
+                          <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 128 512"
+                            className="h-5 w-1 fill-gray-600"
                           >
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              viewBox="0 0 128 512"
-                              className="h-5 w-1 fill-gray-600"
-                            >
-                              {/* <!--! Font Awesome Pro 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --> */}
-                              <path d="M64 360c30.9 0 56 25.1 56 56s-25.1 56-56 56s-56-25.1-56-56s25.1-56 56-56zm0-160c30.9 0 56 25.1 56 56s-25.1 56-56 56s-56-25.1-56-56s25.1-56 56-56zM120 96c0 30.9-25.1 56-56 56S8 126.9 8 96S33.1 40 64 40s56 25.1 56 56z" />
-                            </svg>
-                          </button>
-                        </>
-                      )}
-                    </div>
+                            {/* <!--! Font Awesome Pro 6.2.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license (Commercial License) Copyright 2022 Fonticons, Inc. --> */}
+                            <path d="M64 360c30.9 0 56 25.1 56 56s-25.1 56-56 56s-56-25.1-56-56s25.1-56 56-56zm0-160c30.9 0 56 25.1 56 56s-25.1 56-56 56s-56-25.1-56-56s25.1-56 56-56zM120 96c0 30.9-25.1 56-56 56S8 126.9 8 96S33.1 40 64 40s56 25.1 56 56z" />
+                          </svg>
+                        </button>
+                      </>
+                    )}
                   </div>
                 </ListComponent>
               ))}
