@@ -1,5 +1,5 @@
-import React, { FormEvent, ReactNode, useState } from "react";
-import { DeleteModalTypes, logoutBtn } from "../../types/types";
+import React, { useState } from "react";
+import { DeleteModalTypes, logoutBtn, MemberSetting } from "../../types/types";
 import { api } from "../../utils/api";
 import { getAccessToken, setAccessToken } from "../utils/accesstoken";
 
@@ -52,7 +52,7 @@ export const SuccessModal: React.FC<{
 }> = ({ anim, setAnim, msg }) => {
   return (
     <p
-      className={`absolute py-3 px-5 bg-green-400 font-semibold text-white right-2 md:right-0 rounded-xl gap-x-5 flex transition-[top] ease-in-out ${
+      className={`fixed z-50 py-3 mr-9 px-5 bg-green-400 font-semibold text-white right-2 md:right-0 rounded-xl gap-x-5 flex transition-[top] ease-in-out ${
         anim ? "top-2" : "-top-20"
       }`}
     >
@@ -173,16 +173,7 @@ export const DeleteModal: React.FC<DeleteModalTypes> = ({
   );
 };
 
-export const SetAdminModalsBox: React.FC<{
-  showModal: boolean;
-  children: ReactNode;
-  reqCloseBtn: (arg: boolean) => void;
-  URI: string;
-  memberData: { name: string | null; id: string | null };
-  updateData: (arg: any) => void;
-  setMsg: (arg: any) => void;
-  setAnim: (arg: any) => void;
-}> = ({
+export const SetMembersModalsBox: React.FC<MemberSetting> = ({
   showModal,
   children,
   reqCloseBtn,
@@ -191,6 +182,7 @@ export const SetAdminModalsBox: React.FC<{
   updateData,
   setAnim,
   setMsg,
+  type,
 }) => {
   const accessToken = getAccessToken();
 
@@ -208,7 +200,15 @@ export const SetAdminModalsBox: React.FC<{
       .then((result) => {
         const { result: data } = result.data;
         updateData(() => data);
-        setMsg(() => "berhasil ditambahkan");
+        setMsg(() =>
+          type === "setAdmin"
+            ? "berhasil ditambahkan"
+            : type === "removeAdmin"
+            ? "berhasil dihapus dari admin"
+            : type === "removeMember"
+            ? "berhasil dihapus dari organisasi"
+            : null
+        );
         setAnim(() => true);
         setTimeout(() => {
           setMsg(() => "");
@@ -229,17 +229,23 @@ export const SetAdminModalsBox: React.FC<{
       <div className="relative w-fit m-auto my-auto bg-white pt-10 pb-3 px-20 outline-2 outline outline-blue-600/20  flex flex-col gap-5 justify-center ">
         <button
           className="absolute top-2 right-2 text-sm"
-          onClick={() => reqCloseBtn(true)}
+          onClick={() => reqCloseBtn(null)}
         >
           ✖
         </button>
         {children}
         <button
           type="submit"
-          className="px-2 py-3 bg-yellow-400 font-semibold"
+          className={`px-2 py-3 ${
+            type === "setAdmin"
+              ? "bg-yellow-400"
+              : type === "removeAdmin" || type === "removeMember"
+              ? "bg-red-500 text-white"
+              : null
+          }  font-semibold`}
           onClick={() => {
             editMemberHanler(memberData.id, memberData.name);
-            reqCloseBtn(true);
+            reqCloseBtn(null);
           }}
         >
           Yes
