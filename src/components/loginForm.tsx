@@ -126,9 +126,9 @@ function LoginForm() {
           {Loading ? <SpinnerLoader /> : <>Login</>}
         </button>
 
-        <a className="text-sm underline w-fit" href="">
+        {/* <a className="text-sm underline w-fit" href="">
           Lupa password?
-        </a>
+        </a> */}
       </form>
     </>
   );
