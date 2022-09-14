@@ -8,6 +8,7 @@ export const Home = () => {
       <div className="flex grow-1">
         <Navbar />
         <div className=" w-screen px-5 py-3 max-h-screen min-h-screen overflow-auto pb-32">
+          <h2>Welcome</h2>
           <VoteEvent />
         </div>
       </div>
