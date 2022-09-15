@@ -1,11 +1,14 @@
+import { useContext } from "react";
 import { Link } from "react-router-dom";
 import { organization } from "../../types/types";
+import { dataContext } from "../pages/orgDetail";
 import { ListComponent } from "./ListComponent";
 
 export const ActiveEventList: React.FC<{
-  activeList: organization["voteEvents"] | undefined;
   orgId: organization["_id"] | undefined;
-}> = ({ activeList, orgId }) => {
+}> = ({ orgId }) => {
+  const activeList = useContext(dataContext)?.voteEvents;
+
   return (
     <ul className="border-b-2 border-slate-400 pb-5">
       {!activeList?.length && <p>Belum ada vote event</p>}
