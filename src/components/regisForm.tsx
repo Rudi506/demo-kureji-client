@@ -143,7 +143,7 @@ function Register() {
         autoComplete="off"
         onSubmit={handleSubmit}
         id="registerForm"
-        className="p-5 flex flex-col gap-4 border-b-2 border-x-2 relative"
+        className="p-5 flex flex-col gap-4 border-b-2 border-x-2 relative bg-white"
       >
         <div id="emailInput" className="flex flex-col relative">
           {msg.form === "email" && (

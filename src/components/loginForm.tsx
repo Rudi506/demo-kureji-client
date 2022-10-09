@@ -76,7 +76,7 @@ function LoginForm() {
         method="post"
         onSubmit={handleSubmit}
         id="registerForm"
-        className="p-5 flex flex-col gap-4 border-b-2 border-x-2"
+        className="p-5 flex flex-col gap-4 border-b-2 border-x-2 bg-white"
       >
         <div id="emailInput" className="flex flex-col relative">
           {error.form === "email" && (
