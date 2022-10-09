@@ -95,7 +95,7 @@ export const VotePage: React.FC = () => {
     const ketua = e.currentTarget.getAttribute("data-ketua");
     const wakil = e.currentTarget.getAttribute("data-wakil");
     setCandidate({ id: e.target.id, ketua, wakil });
-
+    console.log("modal vote");
     setIsModalBoxOpen(true);
   };
 
@@ -142,7 +142,7 @@ export const VotePage: React.FC = () => {
                   key={i}
                   candidate={v}
                   hasVoted={HasVoted}
-                  handleModal={() => handleModal}
+                  handleModal={handleModal}
                 />
               ))}
             </ul>
