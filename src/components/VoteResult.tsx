@@ -22,7 +22,9 @@ export const VoteResult: React.FC<{
         <p>Grafik akan muncul setelah jumlah vote mencapai {minPercent}%</p>
       )}
       <div
-        className={`${!isThirty && "hidden"} w-full p-5 flex justify-center`}
+        className={`${
+          /** !isThirty && "hidden" */ ""
+        } w-full p-5 flex justify-center`}
       >
         <div
           id="char-wrapper"
