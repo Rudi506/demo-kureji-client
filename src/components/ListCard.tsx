@@ -1,6 +1,6 @@
 import React, { FormEvent } from "react";
 import { Link } from "react-router-dom";
-import { candidates, ListCardTypes } from "../../types/types";
+import { candidate, candidates, ListCardTypes } from "../../types/types";
 
 export const ListCard: React.FC<ListCardTypes> = ({
   key,
@@ -42,7 +42,7 @@ export const CandidatesCard: React.FC<{
   key: number;
   hasVoted: boolean | undefined;
   handleModal: (arg: FormEvent) => void;
-  candidate: candidates;
+  candidate: candidate;
 }> = ({ key, candidate, hasVoted, handleModal }) => {
   return (
     <li
@@ -53,6 +53,15 @@ export const CandidatesCard: React.FC<{
         candidateId: {candidate._id}
       </p>
       <div id="candidateCard" className="flex flex-col gap-2 grow">
+        {candidate.image?.url && (
+          <div id="imgwrapper">
+            <img
+              src={candidate.image.url}
+              alt={`${candidate.calonKetua}-${candidate.calonWakil}`}
+            />
+          </div>
+        )}
+
         <div id="title" className="flex flex-col text-center">
           <h1>{candidate.calonKetua}</h1>
           {candidate.calonWakil && (
