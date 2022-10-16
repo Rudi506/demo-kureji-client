@@ -24,6 +24,7 @@ export const EventDetail = () => {
         calonWakil: "",
         description: "",
         numOfVotes: 0,
+        image: { url: null },
       },
     ],
     registeredVoters: [{ voter: { name: "" }, hasVoted: false }],
@@ -172,18 +173,40 @@ export const EventDetail = () => {
             <ul className="border-b-2 border-slate-400">
               {Data?.candidates.map((v, i) => (
                 <ListComponent index={i}>
-                  <div className="flex flex-col py-1">
-                    <div id="candidate" className="flex gap-2">
-                      <p>Kandidat:</p>
-                      <h2 className="flex gap-1">
-                        {v.calonKetua} {v.calonWakil && <p>&amp;</p>}{" "}
-                        {v.calonWakil}
-                      </h2>
-                    </div>
-                    <div id="description" className="flex gap-2">
-                      <p>description: </p>
-                      <p>{v.description}</p>
-                    </div>
+                  <div className="w-full">
+                    {isAdmin ? (
+                      <Link
+                        to={`/org/${orgId}/vote/${eventId}/update/${v._id}`}
+                      >
+                        <div className="flex flex-col py-1">
+                          <div id="candidate" className="flex gap-2">
+                            <p>Kandidat:</p>
+                            <h2 className="flex gap-1">
+                              {v.calonKetua} {v.calonWakil && <p>&amp;</p>}{" "}
+                              {v.calonWakil}
+                            </h2>
+                          </div>
+                          <div id="description" className="flex gap-2">
+                            <p>description: </p>
+                            <p>{v.description}</p>
+                          </div>
+                        </div>
+                      </Link>
+                    ) : (
+                      <div className="flex flex-col py-1">
+                        <div id="candidate" className="flex gap-2">
+                          <p>Kandidat:</p>
+                          <h2 className="flex gap-1">
+                            {v.calonKetua} {v.calonWakil && <p>&amp;</p>}{" "}
+                            {v.calonWakil}
+                          </h2>
+                        </div>
+                        <div id="description" className="flex gap-2">
+                          <p>description: </p>
+                          <p>{v.description}</p>
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </ListComponent>
               ))}

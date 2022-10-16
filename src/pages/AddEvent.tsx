@@ -109,7 +109,27 @@ export const AddEvent: React.FC = () => {
             <div id="paslon" className="flex flex-col gap-2">
               candidates
               {candidate.map((v, i) => (
-                <div key={i} id="paslon" className="flex-col flex">
+                <div key={i} id="paslon" className="flex-col flex relative">
+                  {candidate.length > 2 && (
+                    <button
+                      id="removeCandidate"
+                      className={`absolute top-3 right-0 bg-red-100 h-fit w-10 rounded-full flex justify-center items-center m-auto hover:bg-red-300`}
+                      type="button"
+                      onClick={() => {
+                        if (candidate.length <= 2) {
+                          return;
+                        }
+                        setCandidate((prev) => {
+                          return prev.filter((_, index) => index !== i);
+                        });
+                      }}
+                    >
+                      <p className="text-xl font-extrabold text-red-700">
+                        &minus;
+                      </p>
+                    </button>
+                  )}
+
                   <label htmlFor="ketua">{`paslon ${i + 1}`}</label>
                   <input
                     type="text"
@@ -148,7 +168,10 @@ export const AddEvent: React.FC = () => {
               </button>
             </div>
 
-            <button className="px-2 py-1 bg-blue-700 text-white w-fit rounded-xl self-end">
+            <button
+              type="submit"
+              className="px-2 py-1 bg-blue-700 text-white w-fit rounded-xl self-end"
+            >
               Buat Event
             </button>
           </form>

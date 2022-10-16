@@ -13,18 +13,21 @@ export interface addEvent {
   orgId: String | undefined;
 }
 
+export interface candidate {
+  _id: string;
+  calonKetua: string;
+  calonWakil: string;
+  description: string;
+  numOfVotes: number;
+  image: { url: any };
+}
+
 export interface eventDetail {
   _id: string;
   voteTitle: string;
   holder: { _id: string; organization: string };
   isActive: boolean;
-  candidates: {
-    _id: string;
-    calonKetua: string;
-    calonWakil: string;
-    description: string;
-    numOfVotes: number;
-  }[];
+  candidates: candidate[];
   registeredVoters: { voter: { name: string }; hasVoted: boolean }[];
   createdAt: string;
 }

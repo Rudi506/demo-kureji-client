@@ -11,6 +11,7 @@ import { AddEvent } from "./pages/AddEvent";
 import { EventDetail } from "./pages/EventDetail";
 import { VotePage } from "./pages/VotePage";
 import { Loader } from "./components/Loader";
+import EditCandidate from "./pages/editCandidate";
 
 function App() {
   const [loading, setLoading] = useState(true);
@@ -70,6 +71,10 @@ function App() {
         <Route
           path="/org/:orgId/vote/:eventId"
           element={accessToken ? <VotePage /> : <Navigate to={"/"} />}
+        />
+        <Route
+          path="/org/:orgId/vote/:eventId/update/:candidateId"
+          element={accessToken ? <EditCandidate /> : <Navigate to={"/"} />}
         />
       </Routes>
     </BrowserRouter>
