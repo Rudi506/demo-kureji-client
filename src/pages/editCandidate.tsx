@@ -3,13 +3,14 @@ import { useParams } from "react-router";
 import { useNavigate } from "react-router-dom";
 import { candidate, eventDetail } from "../../types/types";
 import { api } from "../../utils/api";
-import { Loader } from "../components/Loader";
+import { Loader, SpinnerLoader } from "../components/Loader";
 import { Navbar } from "../components/navbar";
 import { getAccessToken } from "../utils/accesstoken";
 
 export default function EditCandidate() {
   const { candidateId, orgId, eventId } = useParams();
-  const [Loading, setLoading] = useState<boolean>(false);
+  const [Loading, setLoading] = useState<boolean>(true);
+  const [submitProgress, setSubmitProgress] = useState<boolean>(false);
   const [isAdmin, setIsAdmin] = useState<boolean>(false);
   const [Data, setData] = useState<candidate>({
     calonKetua: "",
@@ -66,6 +67,7 @@ export default function EditCandidate() {
   };
 
   const handleSubmit = (e: FormEvent) => {
+    setSubmitProgress(true);
     e.preventDefault();
     const formData = new FormData();
     formData.append("avatar", image);
@@ -81,9 +83,11 @@ export default function EditCandidate() {
         },
       })
       .then((res) => {
+        setSubmitProgress(false);
         navigate(-1);
       })
       .catch((err) => {
+        setSubmitProgress(false);
         console.log(err);
       });
   };
@@ -175,9 +179,13 @@ export default function EditCandidate() {
               ></textarea>
               <button
                 type="submit"
-                className="self-end bg-blue-500 px-3 py-2 text-white font-semibold rounded-md mt-5"
+                className={`${
+                  !submitProgress
+                    ? "bg-blue-500"
+                    : "bg-purple-600 cursor-not-allowed"
+                } self-end px-3 py-2 text-white font-semibold rounded-md mt-5`}
               >
-                Submit
+                {submitProgress ? <SpinnerLoader /> : <>submit</>}
               </button>
             </form>
           </div>
