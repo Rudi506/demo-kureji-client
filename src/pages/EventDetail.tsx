@@ -24,6 +24,7 @@ export const EventDetail = () => {
         calonWakil: "",
         description: "",
         numOfVotes: 0,
+        image: { url: null },
       },
     ],
     registeredVoters: [{ voter: { name: "" }, hasVoted: false }],
