@@ -50,7 +50,7 @@ function LoginForm() {
     );
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async(e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setLoading(true);
     return api
@@ -118,9 +118,8 @@ function LoginForm() {
         </div>
 
         <button
-          className={`${
-            !Loading ? "bg-sky-500" : "bg-purple-500"
-          }  text-white drop-shadow-md rounded-xl w-fit p-2 px-5 my-2 self-end font-bold hover:bg-sky-600`}
+          className={`${!Loading ? "bg-sky-500" : "bg-purple-500"
+            }  text-white drop-shadow-md rounded-xl w-fit p-2 px-5 my-2 self-end font-bold hover:bg-sky-600`}
           type="submit"
         >
           {Loading ? <SpinnerLoader /> : <>Login</>}
