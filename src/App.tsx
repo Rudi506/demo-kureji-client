@@ -15,7 +15,10 @@ import { Home } from "./pages/Home";
 =======
 import { Loader } from "./components/Loader";
 import EditCandidate from "./pages/editCandidate";
+<<<<<<< HEAD
 >>>>>>> 9fa303d (add edit candidate page)
+=======
+>>>>>>> e955c2c0fc07f3138f10497b16444e1f9ff6163d
 
 function App() {
 
@@ -86,7 +89,10 @@ function App() {
           path="/org/:orgId/vote/:eventId/update/:candidateId"
           element={accessToken ? <EditCandidate /> : <Navigate to={"/"} />}
         />
+<<<<<<< HEAD
 >>>>>>> 9fa303d (add edit candidate page)
+=======
+>>>>>>> e955c2c0fc07f3138f10497b16444e1f9ff6163d
       </Routes>
     </BrowserRouter>
   );

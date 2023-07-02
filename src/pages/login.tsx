@@ -32,6 +32,7 @@ function Login() {
 
   return (
 <<<<<<< HEAD
+<<<<<<< HEAD
     <>
       <div className="min-h-screen mx-auto md:flex justify-center font-inter bg-gradient-to-tr from-sky-900 via-sky-700 to-fuchsia-600">
 				<div className="container self-center flex justify-center">
@@ -60,6 +61,8 @@ function Login() {
 					</div>
 				</div>
 =======
+=======
+>>>>>>> e955c2c0fc07f3138f10497b16444e1f9ff6163d
     <div className="bg-gradient-to-t to-blue-700 from-blue-300">
       <div className="container min-h-screen mx-auto md:flex justify-between font-inter ">
         <div className="hidden lg:grow md:flex md:flex-col lg:flex align-middle w-3/4 lg:my-auto pr-3 lg:w-auto">

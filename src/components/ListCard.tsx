@@ -56,7 +56,10 @@ export const CandidatesCard: React.FC<{
         {candidate.image?.url && (
           <div id="imgwrapper">
             <img
+<<<<<<< HEAD
               className="max-h-[150px] object-contain"
+=======
+>>>>>>> e955c2c0fc07f3138f10497b16444e1f9ff6163d
               src={candidate.image.url}
               alt={`${candidate.calonKetua}-${candidate.calonWakil}`}
             />
