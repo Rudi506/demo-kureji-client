@@ -3,7 +3,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useLocation, useNavigate } from "react-router";
 import { useBlocker } from "./useBlocker";
 
-export function useCallbackPrompt(when: any) {
+export function useCallbackPrompt(when: boolean) {
   const navigate = useNavigate();
   const location = useLocation();
   const [showPrompt, setShowPrompt] = useState<boolean>(false);

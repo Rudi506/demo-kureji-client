@@ -1,6 +1,6 @@
 import React, { FormEvent } from "react";
 import { Link } from "react-router-dom";
-import { candidate, candidates, ListCardTypes } from "../../types/types";
+import { candidate, ListCardTypes } from "../../types/types";
 
 export const ListCard: React.FC<ListCardTypes> = ({
   key,
@@ -56,10 +56,7 @@ export const CandidatesCard: React.FC<{
         {candidate.image?.url && (
           <div id="imgwrapper">
             <img
-<<<<<<< HEAD
               className="max-h-[150px] object-contain"
-=======
->>>>>>> e955c2c0fc07f3138f10497b16444e1f9ff6163d
               src={candidate.image.url}
               alt={`${candidate.calonKetua}-${candidate.calonWakil}`}
             />

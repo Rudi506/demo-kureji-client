@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useParams } from "react-router";
+import { toast } from "react-toastify";
 import { api } from "../../utils/api";
 import { DialogBox } from "../components/dialogueBox";
 import { Navbar } from "../components/navbar";
@@ -13,8 +14,6 @@ export const AddEvent: React.FC = () => {
     { calonKetua: "", calonWakil: "", description: "" },
   ]);
   const [showDialogue, setShowDialogue] = useState(false);
-  const [anim, setAnim] = useState(false);
-  const [msg, setMsg] = useState({ msg: "aaa" });
   const [showPrompt, confirmNavigation, cancelNavigation] =
     useCallbackPrompt(showDialogue);
 
@@ -55,8 +54,7 @@ export const AddEvent: React.FC = () => {
         },
       })
       .then((result) => {
-        setMsg({ msg: "event berhasil ditambahkan" });
-        setAnim(true);
+        toast.success("event barhasil ditambahkan");
         setVoteTitle("");
         setCandidate(
           candidate.map((v, i) => {
@@ -64,24 +62,12 @@ export const AddEvent: React.FC = () => {
           })
         );
         setShowDialogue(false);
-        setTimeout(() => {
-          setMsg({ msg: "" });
-          setAnim(false);
-        }, 1500);
       })
       .catch((err) => console.error(err));
   };
 
   return (
     <>
-      <p
-        className={`fixed py-3 px-5 mr-10 bg-green-400 font-semibold text-white right-2 md:right-0 rounded-xl gap-x-5 flex transition-[top] ease-in-out z-10 ${
-          anim ? "top-2" : "-top-20"
-        }`}
-      >
-        {msg.msg}
-        <button onClick={() => setAnim(false)}>✖</button>
-      </p>
       <div className="flex ">
         <Navbar />
         <DialogBox

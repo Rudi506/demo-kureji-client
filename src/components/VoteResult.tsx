@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { eventDetail } from "../../types/types";
 import { ChartVote } from "./ChartVote";
 import { SubHeading } from "./Heading";
@@ -11,6 +12,11 @@ export const VoteResult: React.FC<{
     ((sumVoted / eventData?.registeredVoters.length) * 100).toFixed(1)
   );
   const isThirty = percentVoted >= minPercent ? true : false;
+
+  useEffect(() => {
+    console.log(percentVoted);
+  }, []);
+
   return (
     <div id="result">
       <SubHeading>Result</SubHeading>
@@ -22,9 +28,7 @@ export const VoteResult: React.FC<{
         <p>Grafik akan muncul setelah jumlah vote mencapai {minPercent}%</p>
       )}
       <div
-        className={`${
-          /** !isThirty && "hidden" */ ""
-        } w-full p-5 flex justify-center`}
+        className={`${!isThirty && "hidden"} w-full p-5 flex justify-center`}
       >
         <div
           id="char-wrapper"
